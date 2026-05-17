@@ -1,0 +1,62 @@
+name: Verify an existing pitfall
+description: Upgrade a stub or schema-only entry to verified by reproducing it
+title: "[verify] <path/to/pitfall.md>"
+labels: ["pitfall: verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to upgrade a `stub` or `schema-only` pitfall to `verified` (or to flag that an existing claim no longer reproduces). Include the file you're verifying and the reproduction you ran.
+
+  - type: input
+    id: pitfall-path
+    attributes:
+      label: Pitfall file
+      description: Path under `pitfalls/` (e.g., `environment/claude-ai-filesystem-resets-between-turns.md`)
+      placeholder: pitfalls/<category>/<file>.md
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current-tier
+    attributes:
+      label: Current tier (before this verification)
+      options:
+        - stub
+        - schema-only
+        - verified (re-verification — claim still reproduces)
+        - verified (no longer reproduces — needs correction)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: verified-platforms
+    attributes:
+      label: Platform(s) you verified on
+      options:
+        - label: Claude.ai
+        - label: Claude Code
+        - label: Claude Desktop
+
+  - type: input
+    id: verification-date
+    attributes:
+      label: Verification date
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Exact input and verbatim output you observed.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes-needed
+    attributes:
+      label: Suggested changes to the pitfall page
+      description: If the page needs edits (corrected severity, updated reproduction, removed claim), describe them here. Otherwise just confirm the existing claim stands.

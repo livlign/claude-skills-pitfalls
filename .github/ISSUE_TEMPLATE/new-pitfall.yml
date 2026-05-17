@@ -1,0 +1,100 @@
+name: New pitfall
+description: Report a pitfall that affects Claude skills at runtime
+title: "[pitfall] <short, specific failure mode>"
+labels: ["pitfall: new"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing. Every pitfall declares a verification tier and platform applicability. If you can include a minimal reproduction (input + verbatim output, platform, date), the entry can land as `verified`. Schema-only and stub entries are also welcome — be honest about which tier applies.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which folder under `pitfalls/` does this belong in?
+      options:
+        - tool-constraints
+        - tool-behaviors
+        - cross-platform
+        - environment
+        - skill-structure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Verification tier
+      options:
+        - verified (reproduced empirically; reproduction included below)
+        - schema-only (verified from tool schema or description; no empirical trigger)
+        - stub (symptom and cause documented; no reproduction yet)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: applies-to
+    attributes:
+      label: Applies to
+      description: Which platforms does this pitfall affect?
+      options:
+        - label: Claude.ai
+        - label: Claude Code
+        - label: Claude Desktop
+
+  - type: input
+    id: verified-on
+    attributes:
+      label: Verified on
+      description: Platform(s) and date(s) you reproduced this. Leave blank for stubs.
+      placeholder: "Claude.ai web, 2026-05-17"
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Hard error
+        - Silent fallback
+        - Silent substitution
+        - Behavioral divergence
+        - Degraded UX
+        - Data loss risk
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptom
+    attributes:
+      label: Symptom
+      description: What does the skill author see when they hit this? One paragraph.
+    validations:
+      required: true
+
+  - type: textarea
+    id: cause
+    attributes:
+      label: Cause
+      description: The hidden constraint or behavior. Cite the tool description / schema / system-prompt text if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal input and verbatim output that triggers the pitfall. Omit if stub.
+      render: text
+
+  - type: textarea
+    id: fix
+    attributes:
+      label: Fix
+      description: The pattern that avoids it. Omit if stub.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Edge cases, related pitfalls, links to upstream tool descriptions.
