@@ -1,10 +1,10 @@
 # Skills fail silently when their named tool doesn't exist
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent fallback
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent fallback
 
 ## Symptom
 

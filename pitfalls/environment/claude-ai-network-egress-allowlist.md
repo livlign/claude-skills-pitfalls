@@ -1,10 +1,10 @@
 # Claude.ai's bash has an HTTPS egress allowlist
 
-**Category:** environment
-**Applies to:** Claude.ai ✅ | Claude Code ❌ (open network) | Claude Desktop ❓
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** environment
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ (open network) | Claude Desktop ❓
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

@@ -1,10 +1,10 @@
 # MCP discovery (`search_mcp_registry`, `suggest_connectors`) is absent on Claude Code
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅ (deferred)
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Feature gap
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅ (deferred)
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Feature gap
 
 ## Symptom
 

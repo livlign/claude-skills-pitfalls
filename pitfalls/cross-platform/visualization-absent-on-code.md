@@ -1,10 +1,10 @@
 # Inline SVG/HTML visualization is absent on Claude Code
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Feature gap
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Feature gap
 
 ## Symptom
 

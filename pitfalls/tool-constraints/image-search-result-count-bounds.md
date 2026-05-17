@@ -1,10 +1,10 @@
 # `image_search.max_results` is bounded to [3, 5]
 
-**Category:** tool-constraints
-**Applies to:** Claude.ai ✅ | Claude Code ❌ (tool doesn't exist) | Claude Desktop ❌ (tool doesn't exist)
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** tool-constraints
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ (tool doesn't exist) | Claude Desktop ❌ (tool doesn't exist)
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

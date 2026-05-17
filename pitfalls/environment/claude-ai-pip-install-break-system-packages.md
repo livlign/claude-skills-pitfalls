@@ -1,10 +1,10 @@
 # Plain `pip install` fails on Claude.ai without `--break-system-packages`
 
-**Category:** environment
-**Applies to:** Claude.ai ✅ | Claude Code ❓ | Claude Desktop ❓
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** environment
+- **Applies to:** Claude.ai ✅ | Claude Code ❓ | Claude Desktop ❓
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

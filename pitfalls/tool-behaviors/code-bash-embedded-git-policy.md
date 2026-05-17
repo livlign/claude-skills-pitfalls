@@ -1,9 +1,9 @@
 # Claude Code's `Bash` embeds a strict git policy in its tool description
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌
-**Verification tier:** schema-only
-**Severity:** Workflow constraint
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌
+- **Verification tier:** schema-only
+- **Severity:** Workflow constraint
 
 ## Symptom
 

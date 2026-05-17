@@ -1,9 +1,9 @@
 # Claude.ai's sandbox filesystem resets between turns
 
-**Category:** environment
-**Applies to:** Claude.ai ✅ | Claude Code ❌ (persistent) | Claude Desktop ❓
-**Verification tier:** stub
-**Severity:** State loss
+- **Category:** environment
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ (persistent) | Claude Desktop ❓
+- **Verification tier:** stub
+- **Severity:** State loss
 
 ## Symptom
 

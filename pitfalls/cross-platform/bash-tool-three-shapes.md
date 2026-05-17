@@ -1,10 +1,10 @@
 # The bash tool has three structurally different shapes across platforms
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ (`bash_tool`) | Claude Code ✅ (`Bash`) | Claude Desktop ✅ (`mcp__workspace__bash`)
-**Verified on:** schema-diff comparison, 2026-05-17
-**Verification tier:** verified
-**Severity:** Behavioral divergence
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ (`bash_tool`) | Claude Code ✅ (`Bash`) | Claude Desktop ✅ (`mcp__workspace__bash`)
+- **Verified on:** schema-diff comparison, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Behavioral divergence
 
 ## Symptom
 

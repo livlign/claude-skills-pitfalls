@@ -1,10 +1,10 @@
 # `references/foo.md` doesn't resolve from the skill's directory
 
-**Category:** skill-structure
-**Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ❓
-**Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error (Claude.ai), Silent 404 (Code)
+- **Category:** skill-structure
+- **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ❓
+- **Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error (Claude.ai), Silent 404 (Code)
 
 ## Symptom
 

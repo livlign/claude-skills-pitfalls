@@ -1,10 +1,10 @@
 # Claude.ai's `view` rejects relative paths and bare filenames
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❌
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❌
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

@@ -1,10 +1,10 @@
 # `/mnt/user-data/uploads/` is read-only on Claude.ai
 
-**Category:** environment
-**Applies to:** Claude.ai ✅ | Claude Code ❌ (path doesn't exist) | Claude Desktop ❌
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** environment
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ (path doesn't exist) | Claude Desktop ❌
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

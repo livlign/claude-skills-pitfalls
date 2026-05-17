@@ -1,10 +1,10 @@
 # `AskUserQuestion` and `ask_user_input_v0` are different tools
 
-**Category:** cross-platform
-**Applies to:** Claude.ai has `ask_user_input_v0` | Claude Code has `AskUserQuestion` | Claude Desktop has `AskUserQuestion`
-**Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent substitution
+- **Category:** cross-platform
+- **Applies to:** Claude.ai has `ask_user_input_v0` | Claude Code has `AskUserQuestion` | Claude Desktop has `AskUserQuestion`
+- **Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent substitution
 
 ## Symptom
 

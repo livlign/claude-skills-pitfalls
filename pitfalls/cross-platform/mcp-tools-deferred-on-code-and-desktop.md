@@ -1,10 +1,10 @@
 # MCP tool schemas are deferred on Claude Code and Desktop
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ❌ (eager) | Claude Code ✅ (deferred) | Claude Desktop ✅ (deferred)
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ❌ (eager) | Claude Code ✅ (deferred) | Claude Desktop ✅ (deferred)
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

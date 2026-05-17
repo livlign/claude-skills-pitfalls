@@ -1,10 +1,10 @@
 # The "Base directory for this skill" header on Code is informational only
 
-**Category:** skill-structure
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❓
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Misleading affordance
+- **Category:** skill-structure
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❓
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Misleading affordance
 
 ## Symptom
 

@@ -1,10 +1,10 @@
 # `conversation_search` is keyword-only; meta-words poison results
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❓
-**Verified on:** Claude.ai web, 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent semantic failure
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❓
+- **Verified on:** Claude.ai web, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent semantic failure
 
 ## Symptom
 

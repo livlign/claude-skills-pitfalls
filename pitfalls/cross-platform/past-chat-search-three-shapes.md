@@ -1,10 +1,10 @@
 # Past-chat search has a different shape on each platform
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ (keyword + time) | Claude Code ❌ (file-based memory) | Claude Desktop ✅ (session list, no keyword)
-**Verified on:** 2026-05-17
-**Verification tier:** verified
-**Severity:** Feature gap
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ (keyword + time) | Claude Code ❌ (file-based memory) | Claude Desktop ✅ (session list, no keyword)
+- **Verified on:** 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Feature gap
 
 ## Symptom
 

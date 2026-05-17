@@ -1,10 +1,10 @@
 # MCP tool names use different formats on Claude.ai vs Code/Desktop
 
-**Category:** cross-platform
-**Applies to:** Claude.ai uses `Server:tool` | Claude Code/Desktop use `mcp__claude_ai_Server__tool`
-**Verified on:** 2026-05-17 across platforms
-**Verification tier:** verified
-**Severity:** Hard error
+- **Category:** cross-platform
+- **Applies to:** Claude.ai uses `Server:tool` | Claude Code/Desktop use `mcp__claude_ai_Server__tool`
+- **Verified on:** 2026-05-17 across platforms
+- **Verification tier:** verified
+- **Severity:** Hard error
 
 ## Symptom
 

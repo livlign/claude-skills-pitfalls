@@ -1,10 +1,10 @@
 # Claude Code's `Read` resolves relative paths against cwd, not the skill directory
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ❌ (different failure mode — see notes) | Claude Code ✅ | Claude Desktop ❓
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent 404
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ❌ (different failure mode — see notes) | Claude Code ✅ | Claude Desktop ❓
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent 404
 
 ## Symptom
 

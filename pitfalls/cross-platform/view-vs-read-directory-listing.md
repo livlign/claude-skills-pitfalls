@@ -1,10 +1,10 @@
 # `view` lists directories; `Read` cannot
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ (lists dirs) | Claude Code ❌ | Claude Desktop ❌
-**Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17
-**Verification tier:** verified
-**Severity:** Functional gap
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ (lists dirs) | Claude Code ❌ | Claude Desktop ❌
+- **Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Functional gap
 
 ## Symptom
 

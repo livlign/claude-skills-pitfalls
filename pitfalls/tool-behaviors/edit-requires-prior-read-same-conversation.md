@@ -1,9 +1,9 @@
 # `Edit` requires a prior `Read` in the same conversation
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Hard error
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Hard error
 
 ## Symptom
 

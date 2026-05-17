@@ -1,9 +1,9 @@
 # `Edit.replace_all` exists on Code/Desktop; Claude.ai's `str_replace` has no equivalent
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Feature gap
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Feature gap
 
 ## Symptom
 

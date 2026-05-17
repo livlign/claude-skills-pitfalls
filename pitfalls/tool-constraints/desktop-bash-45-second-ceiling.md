@@ -1,9 +1,9 @@
 # Claude Desktop's bash caps `timeout_ms` at 45 seconds
 
-**Category:** tool-constraints
-**Applies to:** Claude.ai ❌ | Claude Code ❌ | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Hard error
+- **Category:** tool-constraints
+- **Applies to:** Claude.ai ❌ | Claude Code ❌ | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Hard error
 
 ## Symptom
 

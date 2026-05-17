@@ -1,9 +1,9 @@
 # Claude Code's `Bash` caps `timeout` at 600000ms (10 minutes)
 
-**Category:** tool-constraints
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌
-**Verification tier:** schema-only
-**Severity:** Hard error
+- **Category:** tool-constraints
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌
+- **Verification tier:** schema-only
+- **Severity:** Hard error
 
 ## Symptom
 

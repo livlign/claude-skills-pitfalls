@@ -1,9 +1,9 @@
 # SKILL.md edit hot-reload behavior is unverified
 
-**Category:** skill-structure
-**Applies to:** Claude.ai ❓ | Claude Code ❓ | Claude Desktop ❓
-**Verification tier:** stub
-**Severity:** Unknown
+- **Category:** skill-structure
+- **Applies to:** Claude.ai ❓ | Claude Code ❓ | Claude Desktop ❓
+- **Verification tier:** stub
+- **Severity:** Unknown
 
 ## Symptom
 

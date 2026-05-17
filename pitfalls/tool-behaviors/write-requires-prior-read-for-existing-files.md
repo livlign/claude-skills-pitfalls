@@ -1,9 +1,9 @@
 # `Write` requires a prior `Read` for existing files
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Hard error
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Hard error
 
 ## Symptom
 

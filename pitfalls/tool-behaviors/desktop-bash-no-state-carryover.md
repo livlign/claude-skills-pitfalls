@@ -1,9 +1,9 @@
 # Claude Desktop's bash has no state carryover between calls
 
-**Category:** tool-behaviors
-**Applies to:** Claude.ai ❌ (cwd persists) | Claude Code ❌ (cwd persists) | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Behavioral divergence
+- **Category:** tool-behaviors
+- **Applies to:** Claude.ai ❌ (cwd persists) | Claude Code ❌ (cwd persists) | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Behavioral divergence
 
 ## Symptom
 

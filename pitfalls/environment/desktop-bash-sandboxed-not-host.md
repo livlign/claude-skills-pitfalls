@@ -1,9 +1,9 @@
 # Claude Desktop's bash runs in a sandbox, not the user's real filesystem
 
-**Category:** environment
-**Applies to:** Claude.ai ✅ (separate sandbox) | Claude Code ❌ (host filesystem) | Claude Desktop ✅
-**Verification tier:** schema-only
-**Severity:** Functional gap
+- **Category:** environment
+- **Applies to:** Claude.ai ✅ (separate sandbox) | Claude Code ❌ (host filesystem) | Claude Desktop ✅
+- **Verification tier:** schema-only
+- **Severity:** Functional gap
 
 ## Symptom
 

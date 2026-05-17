@@ -1,10 +1,10 @@
 # "Don't assume which tool to use" is unenforceable without an in-skill picker
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ❓ | Claude Code ✅ | Claude Desktop ❓
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent UX divergence
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ❓ | Claude Code ✅ | Claude Desktop ❓
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent UX divergence
 
 ## Symptom
 

@@ -1,10 +1,10 @@
 # New skill directories hot-load on Claude Code (positive finding)
 
-**Category:** skill-structure
-**Applies to:** Claude Code ✅
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Informational — not a pitfall, a positive finding worth documenting
+- **Category:** skill-structure
+- **Applies to:** Claude Code ✅
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Informational — not a pitfall, a positive finding worth documenting
 
 ## Symptom
 

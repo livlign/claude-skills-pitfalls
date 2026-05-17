@@ -1,10 +1,10 @@
 # Hardcoded tool names in SKILL.md are non-portable
 
-**Category:** skill-structure
-**Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
-**Verified on:** Claude Code, 2026-05-17
-**Verification tier:** verified
-**Severity:** Silent fallback / silent substitution
+- **Category:** skill-structure
+- **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
+- **Verified on:** Claude Code, 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Silent fallback / silent substitution
 
 ## Symptom
 

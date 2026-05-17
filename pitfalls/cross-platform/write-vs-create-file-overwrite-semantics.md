@@ -1,10 +1,10 @@
 # `Write` overwrites silently; `create_file` refuses to overwrite
 
-**Category:** cross-platform
-**Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
-**Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17
-**Verification tier:** verified
-**Severity:** Data loss risk
+- **Category:** cross-platform
+- **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
+- **Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17
+- **Verification tier:** verified
+- **Severity:** Data loss risk
 
 ## Symptom
 
