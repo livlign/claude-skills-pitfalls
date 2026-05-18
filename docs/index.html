@@ -1044,14 +1044,33 @@ function render(text) {
   }
 }
 
+// Single chokepoint for "skill content changed" — every entry point goes through here
+// so the share box, filename label, and report stay in sync.
+function setInput(text, filenameLabel) {
+  const inputEl = document.getElementById("input");
+  const fileinputEl = document.getElementById("fileinput");
+  const filenameEl = document.getElementById("filename");
+  const shareBox = document.getElementById("shareBox");
+  const shortBtn = document.getElementById("shortenShare");
+
+  inputEl.value = text;
+  filenameEl.textContent = filenameLabel || "";
+  // Clear the <input type="file"> so re-selecting the same filename retriggers `change`.
+  if (filenameLabel === "") fileinputEl.value = "";
+
+  // Invalidate the stale share link and reset the Shorten button so a fresh
+  // Share-link click starts clean.
+  shareBox.hidden = true;
+  if (shortBtn) { shortBtn.disabled = false; shortBtn.textContent = "Shorten"; }
+
+  render(text);
+}
+
 document.getElementById("run").addEventListener("click", () => {
   render(document.getElementById("input").value);
 });
 document.getElementById("clear").addEventListener("click", () => {
-  document.getElementById("input").value = "";
-  document.getElementById("filename").textContent = "";
-  document.getElementById("fileinput").value = "";
-  render("");
+  setInput("", "");
 });
 document.getElementById("fileinput").addEventListener("change", (e) => {
   const file = e.target.files && e.target.files[0];
@@ -1061,12 +1080,7 @@ document.getElementById("fileinput").addEventListener("change", (e) => {
     return;
   }
   const reader = new FileReader();
-  reader.onload = (ev) => {
-    const content = ev.target.result;
-    document.getElementById("input").value = content;
-    document.getElementById("filename").textContent = file.name;
-    render(content);
-  };
+  reader.onload = (ev) => { setInput(ev.target.result, file.name); };
   reader.onerror = () => {
     document.getElementById("filename").textContent = "(could not read file)";
   };
@@ -1074,18 +1088,28 @@ document.getElementById("fileinput").addEventListener("change", (e) => {
 });
 document.querySelectorAll(".examples button[data-example]").forEach(b => {
   b.addEventListener("click", () => {
-    const v = EXAMPLES[b.dataset.example];
-    document.getElementById("input").value = v;
-    render(v);
+    setInput(EXAMPLES[b.dataset.example], "(example)");
   });
 });
 
-// Live update on input, debounced. Hide stale share link when input changes.
+// Live update on typed/pasted input, debounced. The `input` event also fires for
+// paste, drag-drop, undo/redo, and IME composition — every native edit path.
+// Programmatic .value assignments (upload, examples, share-link load) do NOT
+// fire this; they go through setInput() above which already invalidates the
+// share box.
 let t;
 document.getElementById("input").addEventListener("input", () => {
   clearTimeout(t);
-  t = setTimeout(() => render(document.getElementById("input").value), 200);
+  const v = document.getElementById("input").value;
+  t = setTimeout(() => render(v), 200);
+  // Stale share link / filename label cleared the moment the user starts editing.
   document.getElementById("shareBox").hidden = true;
+  const filenameEl = document.getElementById("filename");
+  if (filenameEl.textContent && filenameEl.textContent !== "(edited)") {
+    filenameEl.textContent = "(edited)";
+  }
+  const shortBtn = document.getElementById("shortenShare");
+  if (shortBtn) { shortBtn.disabled = false; shortBtn.textContent = "Shorten"; }
 });
 
 // Share link: encode skill content into the URL hash so the recipient sees
