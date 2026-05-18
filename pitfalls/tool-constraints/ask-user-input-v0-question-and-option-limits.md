@@ -1,5 +1,7 @@
 # `ask_user_input_v0` enforces a 3-question, 4-option ceiling
 
+> `ask_user_input_v0` on Claude.ai enforces a schema-level ceiling of 3 questions and 4 options per question; exceeding either limit fails with a validation error.
+
 - **Category:** tool-constraints
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (tool doesn't exist) | Claude Desktop ❌ (tool doesn't exist)
 - **Verified on:** Claude.ai web, 2026-05-17

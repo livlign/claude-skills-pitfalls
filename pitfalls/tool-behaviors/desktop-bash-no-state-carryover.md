@@ -1,5 +1,7 @@
 # Claude Desktop's bash has no state carryover between calls
 
+> On Claude Desktop, each bash call runs in a fresh shell — exported variables, `cd`, and background jobs from a previous call do not carry over to the next.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ (cwd persists) | Claude Code ❌ (cwd persists) | Claude Desktop ✅
 - **Verification tier:** schema-only

@@ -1,5 +1,7 @@
 # `conversation_search` is keyword-only; meta-words poison results
 
+> `conversation_search` does keyword matching, not semantic search; meta-words like 'conversation' or 'chat' in your query poison the results and surface unrelated hits.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❓
 - **Verified on:** Claude.ai web, 2026-05-17

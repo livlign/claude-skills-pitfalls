@@ -1,5 +1,7 @@
 # New skill directories hot-load on Claude Code (positive finding)
 
+> Positive finding: dropping a new skill directory into the skills folder on Claude Code is picked up on the next turn without restarting the session.
+
 - **Category:** skill-structure
 - **Applies to:** Claude Code ✅
 - **Verified on:** Claude Code, 2026-05-17

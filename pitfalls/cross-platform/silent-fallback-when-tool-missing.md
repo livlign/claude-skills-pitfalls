@@ -1,5 +1,7 @@
 # Skills fail silently when their named tool doesn't exist
 
+> When a skill names a tool that doesn't exist on the current platform, the model silently substitutes an approximation instead of erroring — output looks plausible but is wrong.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
 - **Verified on:** Claude Code, 2026-05-17

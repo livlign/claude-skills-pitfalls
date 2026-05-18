@@ -1,5 +1,7 @@
 # Claude.ai's bash has an HTTPS egress allowlist
 
+> Claude.ai's bash environment can only reach an allowlisted set of HTTPS hosts; `curl` to arbitrary domains fails with a network error, not a DNS error.
+
 - **Category:** environment
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (open network) | Claude Desktop ❓
 - **Verified on:** Claude.ai web, 2026-05-17

@@ -1,5 +1,7 @@
 # MCP tool schemas are deferred on Claude Code and Desktop
 
+> MCP tool schemas are not loaded by default on Claude Code and Desktop — calling them without first fetching the schema fails with an InputValidationError.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ❌ (eager) | Claude Code ✅ (deferred) | Claude Desktop ✅ (deferred)
 - **Verified on:** Claude Code, 2026-05-17

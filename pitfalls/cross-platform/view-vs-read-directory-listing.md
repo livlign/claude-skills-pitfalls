@@ -1,5 +1,7 @@
 # `view` lists directories; `Read` cannot
 
+> On Claude.ai the `view` tool can list a directory's contents; on Claude Code and Desktop the `Read` tool errors on directory paths.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ (lists dirs) | Claude Code ❌ | Claude Desktop ❌
 - **Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17

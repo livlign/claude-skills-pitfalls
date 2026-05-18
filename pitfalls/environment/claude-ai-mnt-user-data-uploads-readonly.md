@@ -1,5 +1,7 @@
 # `/mnt/user-data/uploads/` is read-only on Claude.ai
 
+> `/mnt/user-data/uploads/` on Claude.ai is read-only — skills that try to write there for round-tripping uploaded files fail with a permission error. Use `/mnt/user-data/outputs/`.
+
 - **Category:** environment
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (path doesn't exist) | Claude Desktop ❌
 - **Verified on:** Claude.ai web, 2026-05-17

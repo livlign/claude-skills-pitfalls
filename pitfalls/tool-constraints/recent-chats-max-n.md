@@ -1,5 +1,7 @@
 # `recent_chats.n` caps at 20
 
+> `recent_chats.n` is bounded at 20 — values above the cap are rejected; paginate with `before`/`after` cursors instead of asking for a larger page.
+
 - **Category:** tool-constraints
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (tool doesn't exist) | Claude Desktop ❌ (tool doesn't exist)
 - **Verified on:** Claude.ai web, 2026-05-17

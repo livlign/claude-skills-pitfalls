@@ -1,5 +1,7 @@
 # Claude.ai's `view` rejects relative paths and bare filenames
 
+> Claude.ai's `view` tool rejects relative paths and bare filenames with a validation error; only absolute paths starting at `/` work.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❌
 - **Verified on:** Claude.ai web, 2026-05-17

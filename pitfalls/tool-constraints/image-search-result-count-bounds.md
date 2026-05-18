@@ -1,5 +1,7 @@
 # `image_search.max_results` is bounded to [3, 5]
 
+> `image_search.max_results` is bounded to the range [3, 5]; values outside that window are rejected by the tool's schema validation.
+
 - **Category:** tool-constraints
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (tool doesn't exist) | Claude Desktop ❌ (tool doesn't exist)
 - **Verified on:** Claude.ai web, 2026-05-17

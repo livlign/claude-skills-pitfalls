@@ -22,10 +22,31 @@ If you read five entries, read these:
 
 ## How to use this repo
 
-Two entry points:
+Four entry points:
 
+- **Paste your SKILL.md:** the [compatibility checker](docs/index.html) ([live](https://livlign.github.io/claude-skills-pitfalls/)) flags every catalogued pitfall in your skill, per platform
 - **By tool / failure type:** browse [`pitfalls/`](./pitfalls/) by category
 - **By platform:** check the [compatibility matrix](matrix/tool-inventory.md) to see if your skill's tools exist on the platform you're targeting
+- **By symptom:** scan the "Find by symptom" list below for the phrase that matches what your skill is doing wrong
+
+## Find by symptom
+
+If you arrived here from a Google search, the entry that matches your symptom is probably one of these:
+
+- "My skill works on Claude.ai but produces gibberish on Claude Code / Desktop" → [Skills fail silently when their named tool doesn't exist](pitfalls/cross-platform/silent-fallback-when-tool-missing.md)
+- "`Write` overwrote my file with no warning" → [Write vs create_file overwrite semantics](pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md)
+- "`Edit` failed with 'you must use Read first'" → [Edit requires a prior Read in the same conversation](pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md)
+- "`ask_user_input_v0` schema validation error / too many questions / too many options" → [ask_user_input_v0 3-question, 4-option ceiling](pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md)
+- "`references/foo.md` not found / doesn't load from my skill dir" → [references/ path resolution](pitfalls/skill-structure/references-directory-path-resolution.md)
+- "`pip install` fails on Claude.ai with externally-managed-environment" → [Claude.ai pip install break-system-packages](pitfalls/environment/claude-ai-pip-install-break-system-packages.md)
+- "Files my skill wrote disappeared between turns on Claude.ai" → [Claude.ai sandbox filesystem resets between turns](pitfalls/environment/claude-ai-filesystem-resets-between-turns.md)
+- "`curl` / network request blocked on Claude.ai" → [Claude.ai HTTPS egress allowlist](pitfalls/environment/claude-ai-network-egress-allowlist.md)
+- "Bash `timeout` rejected / capped on Claude Code" → [Claude Code Bash 600s timeout ceiling](pitfalls/tool-constraints/code-bash-600-second-ceiling.md)
+- "Bash `timeout_ms` capped on Claude Desktop" → [Claude Desktop bash 45s ceiling](pitfalls/tool-constraints/desktop-bash-45-second-ceiling.md)
+- "Shell variable lost between bash calls on Claude Desktop" → [Desktop bash no state carryover](pitfalls/tool-behaviors/desktop-bash-no-state-carryover.md)
+- "Claude Code refused my `git commit --amend` / `--no-verify`" → [Code Bash embedded git policy](pitfalls/tool-behaviors/code-bash-embedded-git-policy.md)
+- "MCP tool name format mismatch across platforms" → [MCP tool name format diverges](pitfalls/cross-platform/mcp-tool-name-format-diverges.md)
+- "`AskUserQuestion` vs `ask_user_input_v0` — which one?" → [AskUserQuestion vs ask_user_input_v0](pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md)
 
 ## Categories
 

@@ -1,5 +1,7 @@
 # `Write` overwrites silently; `create_file` refuses to overwrite
 
+> Claude Code's `Write` overwrites existing files silently; Claude.ai's `create_file` refuses to overwrite and errors. The most dangerous cross-platform divergence in the catalog.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
 - **Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17

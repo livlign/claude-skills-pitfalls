@@ -1,5 +1,7 @@
 # "Don't assume which tool to use" is unenforceable without an in-skill picker
 
+> Telling the model 'don't assume which tool to use' in SKILL.md doesn't reliably prevent assumption — only an explicit `AskUserQuestion`/`ask_user_input_v0` picker does.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ❓ | Claude Code ✅ | Claude Desktop ❓
 - **Verified on:** Claude Code, 2026-05-17

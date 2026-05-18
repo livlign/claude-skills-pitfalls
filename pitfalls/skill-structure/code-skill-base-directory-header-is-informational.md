@@ -1,5 +1,7 @@
 # The "Base directory for this skill" header on Code is informational only
 
+> The 'Base directory for this skill: <path>' line Claude Code injects above SKILL.md is informational only — tools do not resolve relative paths against it.
+
 - **Category:** skill-structure
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❓
 - **Verified on:** Claude Code, 2026-05-17

@@ -1,5 +1,7 @@
 # Claude Code's `Read` resolves relative paths against cwd, not the skill directory
 
+> Claude Code's `Read` resolves relative paths against the current working directory, not the skill's own directory — `Read('references/foo.md')` from a skill rarely finds the file.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ (different failure mode — see notes) | Claude Code ✅ | Claude Desktop ❓
 - **Verified on:** Claude Code, 2026-05-17

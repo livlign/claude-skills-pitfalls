@@ -1,5 +1,7 @@
 # Hardcoded tool names in SKILL.md are non-portable
 
+> Hardcoding tool names like 'use the Write tool' in SKILL.md breaks the skill on platforms where that tool name doesn't exist — write tool-agnostic instructions instead.
+
 - **Category:** skill-structure
 - **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅
 - **Verified on:** Claude Code, 2026-05-17

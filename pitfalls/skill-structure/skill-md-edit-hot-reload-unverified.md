@@ -1,5 +1,7 @@
 # SKILL.md edit hot-reload behavior is unverified
 
+> Whether edits to an already-loaded SKILL.md are reflected mid-session (vs requiring a restart) is unverified on every platform — assume restart is needed.
+
 - **Category:** skill-structure
 - **Applies to:** Claude.ai ❓ | Claude Code ❓ | Claude Desktop ❓
 - **Verification tier:** stub

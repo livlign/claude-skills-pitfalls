@@ -1,5 +1,7 @@
 # Claude.ai's sandbox filesystem resets between turns
 
+> Claude.ai's sandbox filesystem is wiped between conversation turns — files your skill wrote in turn N are gone in turn N+1 unless persisted to `/mnt/user-data/outputs/`.
+
 - **Category:** environment
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ (persistent) | Claude Desktop ❓
 - **Verification tier:** stub

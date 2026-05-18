@@ -1,5 +1,7 @@
 # `Write` requires a prior `Read` for existing files
 
+> Claude Code's `Write` refuses to overwrite an existing file unless `Read` was called on that path earlier in the conversation — even when the overwrite is intentional.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
 - **Verification tier:** schema-only

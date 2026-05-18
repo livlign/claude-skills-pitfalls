@@ -1,5 +1,7 @@
 # The bash tool has three structurally different shapes across platforms
 
+> Claude.ai, Claude Code, and Claude Desktop each expose a structurally different bash tool — different parameter names, different timeouts, different state semantics.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ (`bash_tool`) | Claude Code ✅ (`Bash`) | Claude Desktop ✅ (`mcp__workspace__bash`)
 - **Verified on:** schema-diff comparison, 2026-05-17

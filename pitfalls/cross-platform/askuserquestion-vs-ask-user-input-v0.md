@@ -1,5 +1,7 @@
 # `AskUserQuestion` and `ask_user_input_v0` are different tools
 
+> `AskUserQuestion` (Code/Desktop) and `ask_user_input_v0` (Claude.ai) serve the same purpose but have different schemas, different limits, and different question/option caps.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai has `ask_user_input_v0` | Claude Code has `AskUserQuestion` | Claude Desktop has `AskUserQuestion`
 - **Verified on:** Claude.ai 2026-05-17, Claude Code 2026-05-17

@@ -1,5 +1,7 @@
 # Inline SVG/HTML visualization is absent on Claude Code
 
+> Inline SVG/HTML rendering works on Claude.ai and Desktop but not on Claude Code; skills that emit visualizations there produce raw markup instead of a rendered image.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅
 - **Verified on:** Claude Code, 2026-05-17

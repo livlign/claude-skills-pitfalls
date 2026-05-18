@@ -1,5 +1,7 @@
 # `Edit` requires a prior `Read` in the same conversation
 
+> Claude Code's `Edit` errors with 'you must use Read first' unless `Read` was called on the same file earlier in the same conversation — even if your skill just wrote it.
+
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
 - **Verification tier:** schema-only

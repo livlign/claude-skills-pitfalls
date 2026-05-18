@@ -1,5 +1,7 @@
 # Past-chat search has a different shape on each platform
 
+> Searching past conversations uses `conversation_search` on Claude.ai, a different shape on Desktop, and isn't available on Claude Code — same intent, three implementations.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ (keyword + time) | Claude Code ❌ (file-based memory) | Claude Desktop ✅ (session list, no keyword)
 - **Verified on:** 2026-05-17

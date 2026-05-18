@@ -1,5 +1,7 @@
 # MCP discovery (`search_mcp_registry`, `suggest_connectors`) is absent on Claude Code
 
+> `search_mcp_registry` and `suggest_connectors` exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅ (deferred)
 - **Verified on:** Claude Code, 2026-05-17

@@ -1,5 +1,7 @@
 # Claude Desktop's bash runs in a sandbox, not the user's real filesystem
 
+> Claude Desktop's bash runs in a Docker-based sandbox, not the user's real macOS/Windows shell — `~`, host paths, and host-installed binaries are not present.
+
 - **Category:** environment
 - **Applies to:** Claude.ai ✅ (separate sandbox) | Claude Code ❌ (host filesystem) | Claude Desktop ✅
 - **Verification tier:** schema-only

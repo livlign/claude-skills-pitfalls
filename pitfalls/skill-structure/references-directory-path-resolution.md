@@ -1,5 +1,7 @@
 # `references/foo.md` doesn't resolve from the skill's directory
 
+> The `references/foo.md` pattern recommended by skill-creator does not resolve relative to the skill's own directory at runtime — you must construct the absolute path yourself.
+
 - **Category:** skill-structure
 - **Applies to:** Claude.ai ✅ | Claude Code ✅ | Claude Desktop ❓
 - **Verified on:** Claude.ai web 2026-05-17, Claude Code 2026-05-17

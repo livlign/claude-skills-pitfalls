@@ -1,5 +1,7 @@
 # Claude Code's `Bash` caps `timeout` at 600000ms (10 minutes)
 
+> Claude Code's `Bash` caps `timeout` at 600000ms (10 minutes); requests above the ceiling are rejected by the schema rather than clamped.
+
 - **Category:** tool-constraints
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌
 - **Verification tier:** schema-only

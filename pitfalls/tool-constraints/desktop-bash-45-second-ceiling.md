@@ -1,5 +1,7 @@
 # Claude Desktop's bash caps `timeout_ms` at 45 seconds
 
+> Claude Desktop's bash tool caps `timeout_ms` at 45000 — values above 45 seconds are silently clamped, and long-running commands die mid-execution.
+
 - **Category:** tool-constraints
 - **Applies to:** Claude.ai ❌ | Claude Code ❌ | Claude Desktop ✅
 - **Verification tier:** schema-only

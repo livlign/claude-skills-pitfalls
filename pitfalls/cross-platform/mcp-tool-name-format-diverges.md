@@ -1,5 +1,7 @@
 # MCP tool names use different formats on Claude.ai vs Code/Desktop
 
+> MCP tool names appear as `server__tool` on some surfaces and `mcp__server__tool` on others — hardcoding either form breaks the skill on the other.
+
 - **Category:** cross-platform
 - **Applies to:** Claude.ai uses `Server:tool` | Claude Code/Desktop use `mcp__claude_ai_Server__tool`
 - **Verified on:** 2026-05-17 across platforms
