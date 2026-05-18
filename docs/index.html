@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Skill Compatibility Checker — claude-skills-pitfalls</title>
+<meta name="description" content="Paste your SKILL.md and see which Claude platforms it'll work on. Detects calls to Write, Edit, Bash, AskUserQuestion, ask_user_input_v0, view, create_file, and more — flags cross-platform pitfalls.">
+<meta property="og:title" content="Claude Skill Compatibility Checker">
+<meta property="og:description" content="Paste your SKILL.md, see which of Claude.ai, Claude Code, and Claude Desktop will run it without silent fallbacks or schema errors.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ──────────────────────────────────────────────────────────────
+     SWISS / INTERNATIONAL TYPOGRAPHIC STYLE
+     IBM Plex Sans + IBM Plex Mono · paper background · ink type
+     Hairline rules · zero radius · zero shadow · flush-left grid
+     ────────────────────────────────────────────────────────────── */
+
+  :root {
+    --paper:      #f6f6f1;
+    --paper-2:    #eeeee7;
+    --paper-3:    #e3e3da;
+    --ink:        #0e0e0c;
+    --ink-2:      #2a2a26;
+    --ink-3:      #5d5d56;
+    --ink-4:      #8c8c83;
+    --rule:       #cccac0;
+    --rule-soft:  #e0ddd2;
+    --ok:         #1e6b3e;
+    --warn:       #8d6300;
+    --err:        #9a1f17;
+
+    --sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 32px 24px; }
+  @media (max-width: 700px) { .wrap { padding: 16px 16px 24px; } }
+
+  /* ── Header ─────────────────────────────────────────────────── */
+
+  .eyebrow {
+    display: flex; justify-content: space-between; gap: 24px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--ink);
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-2);
+  }
+  .eyebrow span:last-child { color: var(--ink-3); }
+
+  header.hero { padding: 18px 0 18px; border-bottom: 1px solid var(--ink); }
+  @media (max-width: 700px) { header.hero { padding: 14px 0; } }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) 2fr;
+    gap: 32px;
+    align-items: baseline;
+  }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 8px; } }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  h1 .accent { color: var(--ink-3); font-weight: 400; }
+
+  .lead {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 78ch;
+  }
+  .lead code {
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    padding: 1px 5px; background: var(--paper-2); border: 1px solid var(--rule-soft);
+  }
+  .source-link {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+  }
+  .source-link:hover { color: var(--ink-3); border-bottom-color: var(--ink-3); }
+
+  /* ── Section scaffolding ───────────────────────────────────── */
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 0;
+  }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    min-width: 0;
+    padding: 16px 0 16px;
+    border-right: 1px solid var(--rule);
+  }
+  .panel:last-child { border-right: 0; padding-left: 24px; }
+  .panel:first-child { padding-right: 24px; }
+  @media (max-width: 900px) {
+    .panel { padding: 16px 0 !important; border-right: 0; border-bottom: 1px solid var(--rule); }
+    .panel:last-child { border-bottom: 0; }
+  }
+
+  .section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    min-width: 28px;
+  }
+  .panel h2 {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .section-meta {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Form controls ─────────────────────────────────────────── */
+
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.55;
+    resize: vertical;
+    outline: 0;
+  }
+  textarea::placeholder { color: var(--ink-4); }
+  textarea:focus {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+
+  .actions {
+    display: flex;
+    gap: 0;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .actions > * + * { margin-left: -1px; }   /* tight Swiss button bar — shared borders */
+
+  button, .upload-label {
+    appearance: none;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    padding: 6px 12px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    transition: background 100ms linear, color 100ms linear;
+  }
+  button:hover, .upload-label:hover { background: var(--ink); color: var(--paper); }
+  button:focus-visible, .upload-label:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  button#run { background: var(--ink); color: var(--paper); }
+  button#run:hover { background: var(--ink-2); }
+
+  button.secondary { background: var(--paper); color: var(--ink); }
+  button[disabled] { opacity: 0.45; cursor: not-allowed; }
+  button[disabled]:hover { background: var(--paper); color: var(--ink); }
+
+  .upload-label input { display: none; }
+
+  .filename {
+    margin-left: 12px;
+    align-self: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Examples row ──────────────────────────────────────────── */
+
+  .examples {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+  .examples button {
+    background: transparent; border: 0; padding: 0;
+    margin: 0 16px 0 0;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+  }
+  .examples button:hover {
+    background: transparent;
+    color: var(--ink-3);
+    border-bottom-color: var(--ink-3);
+  }
+
+  /* ── Detected tools chip strip ────────────────────────────── */
+
+  .detected {
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+  }
+  .detected em { font-style: normal; color: var(--ink-4); }
+  .chip {
+    display: inline-block;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    margin: 0 4px 0 0;
+    color: var(--ink);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ── Status mark (replaces .dot — square not circle) ─────── */
+
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 0;
+    flex-shrink: 0;
+    background: var(--ink-4);
+  }
+  .dot.ok   { background: var(--ok); }
+  .dot.warn { background: var(--warn); }
+  .dot.err  { background: var(--err); }
+
+  /* ── Summary cards ─────────────────────────────────────────── */
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 14px;
+    border: 1px solid var(--ink);
+  }
+  @media (max-width: 700px) { .summary { grid-template-columns: 1fr; } }
+  .summary-card {
+    background: var(--paper);
+    border-right: 1px solid var(--ink);
+    padding: 10px 12px 10px;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .summary-card:last-child { border-right: 0; }
+  @media (max-width: 700px) {
+    .summary-card { border-right: 0; border-bottom: 1px solid var(--ink); }
+    .summary-card:last-child { border-bottom: 0; }
+  }
+  .summary-card::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: var(--paper-3);
+  }
+  .summary-card.ok::before   { background: var(--ok); }
+  .summary-card.warn::before { background: var(--warn); }
+  .summary-card.err::before  { background: var(--err); }
+
+  .summary-card .pname {
+    margin: 2px 0 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+  .summary-card .pverdict {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .summary-card.ok .pverdict   { color: var(--ok); }
+  .summary-card.warn .pverdict { color: var(--warn); }
+  .summary-card.err .pverdict  { color: var(--err); }
+  .summary-card .pcount {
+    margin: 4px 0 0;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+  .summary-card .pcount strong { color: var(--ink); font-weight: 600; }
+
+  /* ── Tool cards (per-tool rows) ────────────────────────────── */
+
+  .tools-empty {
+    font-size: 13px;
+    color: var(--ink-3);
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    line-height: 1.6;
+  }
+  .tools-empty a { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 1px; text-decoration: none; }
+
+  .tool-card {
+    background: var(--paper);
+    border: 0;
+    border-top: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 10px 0 10px;
+    margin: 0;
+  }
+  .tool-card:last-child { border-bottom: 1px solid var(--rule); }
+
+  .tool-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .tool-head .tname {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    word-break: break-word;
+  }
+  .tool-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px 4px 9px;
+    border-radius: 0;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .badge .platform-label { color: inherit; font-weight: 500; }
+  .badge.ok   { color: var(--ok);   border-color: var(--ok); }
+  .badge.warn { color: var(--warn); border-color: var(--warn); }
+  .badge.err  { color: var(--err);  border-color: var(--err); }
+
+  .reasons { list-style: none; padding: 0; margin: 0; }
+  .reasons li {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 5px 0 5px 0;
+    border-top: 1px dotted var(--rule);
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .reasons li:first-child { border-top: 0; padding-top: 0; }
+  @media (max-width: 600px) {
+    .reasons li { grid-template-columns: 1fr; gap: 4px; }
+  }
+  .reasons .pkey {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 3px;
+    color: var(--ink-3);
+  }
+  .reasons .pkey.ok   { color: var(--ok); }
+  .reasons .pkey.warn { color: var(--warn); }
+  .reasons .pkey.err  { color: var(--err); }
+  .reasons .rbody { color: var(--ink-2); }
+  .reasons .rbody code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule-soft);
+    padding: 1px 5px;
+    border-radius: 0;
+    color: var(--ink);
+  }
+  .reasons a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+    white-space: nowrap;
+    margin-left: 4px;
+  }
+  .reasons a:hover { color: var(--ink-3); border-bottom-color: var(--ink-3); }
+
+  .empty {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* ── Share box ─────────────────────────────────────────────── */
+
+  .share-box {
+    margin-top: 20px;
+    padding: 16px 18px;
+    background: var(--paper-2);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .share-label {
+    margin: 0 0 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+  .share-row {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    min-width: 0;
+  }
+  .share-row > * + * { margin-left: -1px; }
+  .share-url {
+    flex: 1;
+    min-width: 0;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    padding: 10px 12px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  .share-url:hover { background: #fff; }
+  .share-hint {
+    margin: 12px 0 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .share-hint code {
+    font-family: var(--mono); font-size: 11px;
+    background: var(--paper); border: 1px solid var(--rule-soft); padding: 1px 5px;
+  }
+  .share-hint a { color: var(--ink); border-bottom: 1px solid var(--ink); text-decoration: none; padding-bottom: 1px; }
+  .share-hint strong { color: var(--ink); font-weight: 600; }
+
+  /* ── Footer ────────────────────────────────────────────────── */
+
+  footer {
+    margin-top: 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--ink);
+    color: var(--ink-3);
+    font-size: 11px;
+    line-height: 1.5;
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+  }
+  footer p { margin: 0; }
+  footer a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+  }
+  footer a:hover { color: var(--ink-3); border-bottom-color: var(--ink-3); }
+
+  .footer-line {
+    display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline;
+    text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px;
+  }
+  .footer-line .sep { color: var(--ink-4); }
+  .footer-line .col-label { color: var(--ink); font-weight: 600; margin-right: 6px; }
+  .footer-line .col-body { color: var(--ink-3); text-transform: none; letter-spacing: 0.02em; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">
+    <span>Compatibility Checker · v0.1</span>
+    <span>claude-skills-pitfalls</span>
+  </div>
+
+  <header class="hero">
+    <div class="hero-grid">
+      <h1>Claude Skill Compatibility <span class="accent">Checker</span></h1>
+      <p class="lead">Paste a <code>SKILL.md</code>. Get a per-platform verdict — Claude.ai, Claude Code, Claude Desktop — flagging tools that don't exist there or behave differently, with links to the pitfall pages that explain each divergence. Data from the <a class="source-link" href="https://github.com/livlign/claude-skills-pitfalls">claude-skills-pitfalls</a> catalog.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>Input</h2>
+        <span class="section-meta">SKILL.md source</span>
+      </div>
+      <textarea id="input" placeholder="---
+name: my-skill
+description: ...
+---
+
+When the user asks to save a file, use the Write tool.
+After saving, use AskUserQuestion to confirm.
+..."></textarea>
+      <div class="actions">
+        <button id="run">Check</button>
+        <label class="upload-label">
+          Upload
+          <input type="file" id="fileinput" accept=".md,.markdown,.txt,text/markdown,text/plain">
+        </label>
+        <button id="share">Share link</button>
+        <button class="secondary" id="clear">Clear</button>
+        <span class="filename" id="filename"></span>
+      </div>
+      <div class="share-box" id="shareBox" hidden>
+        <p class="share-label">Share this link — recipient sees the same skill and report</p>
+        <div class="share-row">
+          <a id="shareLink" class="share-url" href="#" target="_blank" rel="noopener"></a>
+          <button class="secondary" id="copyShare">Copy</button>
+          <button class="secondary" id="shortenShare" title="Get a tinyurl.com short link">Shorten</button>
+        </div>
+        <p class="share-hint" id="shareHint"></p>
+      </div>
+      <div class="examples">
+        Examples
+        <button data-example="cross-platform">Cross-platform</button>
+        <button data-example="claude-ai-only">Claude.ai only</button>
+        <button data-example="code-only">Claude Code only</button>
+      </div>
+      <div class="detected" id="detected"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>Report</h2>
+        <span class="section-meta">Per-platform verdict</span>
+      </div>
+      <div class="summary" id="summary">
+        <div class="summary-card"><p class="pname">Claude.ai</p><p class="pverdict">—</p><p class="pcount">Awaiting input.</p></div>
+        <div class="summary-card"><p class="pname">Claude Code</p><p class="pverdict">—</p><p class="pcount">Awaiting input.</p></div>
+        <div class="summary-card"><p class="pname">Claude Desktop</p><p class="pverdict">—</p><p class="pcount">Awaiting input.</p></div>
+      </div>
+      <div id="toolList"></div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-line">
+      <span><span class="col-label">Method</span><span class="col-body">Static regex against the catalog.</span></span>
+      <span class="sep">·</span>
+      <span><span class="col-label">Coverage</span><span class="col-body">~25 patterns. Clean ≠ guaranteed.</span></span>
+      <span class="sep">·</span>
+      <span><span class="col-label">Contribute</span><span class="col-body"><a href="https://github.com/livlign/claude-skills-pitfalls">github.com/livlign/claude-skills-pitfalls</a></span></span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const REPO = "https://github.com/livlign/claude-skills-pitfalls/blob/main";
+
+// Each tool: pattern matches what an author might write in SKILL.md.
+// Per-platform status: ok | caveat | missing
+// reason: shown in the report; href: deep link to a pitfall page
+const TOOLS = [
+  {
+    id: "Write",
+    pattern: /\b(Write tool|`Write`|\bWrite\()/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "`Write` does not exist on Claude.ai — equivalent is `create_file`, which refuses to overwrite.", href: REPO + "/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md" },
+      "code":      { status: "caveat",  reason: "Silently overwrites existing files; requires a prior `Read` of an existing file before writing.", href: REPO + "/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md" },
+      "desktop":   { status: "caveat",  reason: "Silently overwrites existing files; requires a prior `Read` of an existing file before writing.", href: REPO + "/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md" }
+    }
+  },
+  {
+    id: "create_file",
+    pattern: /\bcreate_file\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Refuses to overwrite existing files — errors instead of silently replacing.", href: REPO + "/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md" },
+      "code":      { status: "missing", reason: "`create_file` does not exist; use `Write` (which silently overwrites — different semantics).", href: REPO + "/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md" },
+      "desktop":   { status: "missing", reason: "`create_file` does not exist; use `Write` (which silently overwrites — different semantics).", href: REPO + "/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md" }
+    }
+  },
+  {
+    id: "Edit",
+    pattern: /\b(Edit tool|`Edit`|\bEdit\()/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "`Edit` does not exist on Claude.ai; equivalent is `str_replace_based_edit_tool`, which has no `replace_all`.", href: REPO + "/pitfalls/cross-platform/edit-replace-all-divergence.md" },
+      "code":      { status: "caveat",  reason: "Requires a prior `Read` on the same file in the same conversation, even if your skill just wrote it.", href: REPO + "/pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md" },
+      "desktop":   { status: "caveat",  reason: "Requires a prior `Read` on the same file in the same conversation, even if your skill just wrote it.", href: REPO + "/pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md" }
+    }
+  },
+  {
+    id: "str_replace",
+    pattern: /\bstr_replace(_based_edit_tool)?\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "No `replace_all` parameter — match must be unique in the file.", href: REPO + "/pitfalls/cross-platform/edit-replace-all-divergence.md" },
+      "code":      { status: "missing", reason: "Not present; use `Edit` instead (which does support `replace_all`).", href: REPO + "/pitfalls/cross-platform/edit-replace-all-divergence.md" },
+      "desktop":   { status: "missing", reason: "Not present; use `Edit` instead (which does support `replace_all`).", href: REPO + "/pitfalls/cross-platform/edit-replace-all-divergence.md" }
+    }
+  },
+  {
+    id: "Read",
+    pattern: /\b(Read tool|`Read`|\bRead\()/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "`Read` does not exist; the equivalent is `view` (and only `view` can list directories).", href: REPO + "/pitfalls/cross-platform/view-vs-read-directory-listing.md" },
+      "code":      { status: "caveat",  reason: "Relative paths resolve against cwd, not the skill's directory — `Read('references/foo.md')` from a skill usually fails.", href: REPO + "/pitfalls/tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.md" },
+      "desktop":   { status: "ok",      reason: "Available." }
+    }
+  },
+  {
+    id: "view",
+    pattern: /\b(view tool|`view`)\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Rejects relative paths and bare filenames — absolute paths only.", href: REPO + "/pitfalls/tool-behaviors/claude-ai-view-requires-absolute-paths.md" },
+      "code":      { status: "missing", reason: "Not present; use `Read` for files, `Bash ls` for directories.", href: REPO + "/pitfalls/cross-platform/view-vs-read-directory-listing.md" },
+      "desktop":   { status: "missing", reason: "Not present; use `Read` for files, `bash ls` for directories.", href: REPO + "/pitfalls/cross-platform/view-vs-read-directory-listing.md" }
+    }
+  },
+  {
+    id: "Bash",
+    pattern: /\b(Bash tool|`Bash`|\bBash\()/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "On Claude.ai the bash tool is named `bash_tool` (sandboxed, with an egress allowlist).", href: REPO + "/pitfalls/cross-platform/bash-tool-three-shapes.md" },
+      "code":      { status: "caveat",  reason: "`timeout` capped at 600000ms; embedded git policy refuses `--amend`, `--no-verify`, force-push, etc.", href: REPO + "/pitfalls/tool-behaviors/code-bash-embedded-git-policy.md" },
+      "desktop":   { status: "missing", reason: "On Desktop the bash tool is exposed as `mcp__workspace__bash` (sandbox, 45s cap, no state carryover).", href: REPO + "/pitfalls/cross-platform/bash-tool-three-shapes.md" }
+    }
+  },
+  {
+    id: "bash_tool",
+    pattern: /\bbash_tool\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Sandboxed filesystem resets between turns; HTTPS egress is allowlisted; `pip install` needs `--break-system-packages`.", href: REPO + "/pitfalls/environment/claude-ai-network-egress-allowlist.md" },
+      "code":      { status: "missing", reason: "On Claude Code the tool is named `Bash`.", href: REPO + "/pitfalls/cross-platform/bash-tool-three-shapes.md" },
+      "desktop":   { status: "missing", reason: "On Desktop the tool is named `mcp__workspace__bash`.", href: REPO + "/pitfalls/cross-platform/bash-tool-three-shapes.md" }
+    }
+  },
+  {
+    id: "AskUserQuestion",
+    pattern: /\bAskUserQuestion\b/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "Not present; the Claude.ai equivalent is `ask_user_input_v0` with a tighter 3-question cap.", href: REPO + "/pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md" },
+      "code":      { status: "caveat",  reason: "Caps at 4 questions × 4 options. Schema differs from `ask_user_input_v0`.", href: REPO + "/pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md" },
+      "desktop":   { status: "caveat",  reason: "Caps at 4 questions × 4 options. Schema differs from `ask_user_input_v0`.", href: REPO + "/pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md" }
+    }
+  },
+  {
+    id: "ask_user_input_v0",
+    pattern: /\bask_user_input_v0\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Schema-enforced cap: 3 questions max, 4 options max per question.", href: REPO + "/pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md" },
+      "code":      { status: "missing", reason: "Not present; use `AskUserQuestion`.", href: REPO + "/pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md" },
+      "desktop":   { status: "missing", reason: "Not present; use `AskUserQuestion`.", href: REPO + "/pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md" }
+    }
+  },
+  {
+    id: "web_search",
+    pattern: /\bweb_search\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Available." },
+      "code":      { status: "missing", reason: "On Code the tool is named `WebSearch`." },
+      "desktop":   { status: "missing", reason: "On Desktop the tool is named `WebSearch`." }
+    }
+  },
+  {
+    id: "WebSearch",
+    pattern: /\bWebSearch\b/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "On Claude.ai the tool is named `web_search`." },
+      "code":      { status: "ok",      reason: "Available." },
+      "desktop":   { status: "ok",      reason: "Available." }
+    }
+  },
+  {
+    id: "web_fetch",
+    pattern: /\bweb_fetch\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Available (broader than the bash egress allowlist)." },
+      "code":      { status: "missing", reason: "On Code the tool is named `WebFetch`." },
+      "desktop":   { status: "missing", reason: "On Desktop the tool is named `WebFetch`." }
+    }
+  },
+  {
+    id: "WebFetch",
+    pattern: /\bWebFetch\b/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "On Claude.ai the tool is named `web_fetch`." },
+      "code":      { status: "ok",      reason: "Available." },
+      "desktop":   { status: "ok",      reason: "Available." }
+    }
+  },
+  {
+    id: "image_search",
+    pattern: /\bimage_search\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "`max_results` is bounded to [3, 5] — out-of-range values are rejected.", href: REPO + "/pitfalls/tool-constraints/image-search-result-count-bounds.md" },
+      "code":      { status: "missing", reason: "Not available on Claude Code." },
+      "desktop":   { status: "missing", reason: "Not available on Claude Desktop." }
+    }
+  },
+  {
+    id: "conversation_search",
+    pattern: /\bconversation_search\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Keyword-literal, not semantic — meta-words like 'conversation' poison results.", href: REPO + "/pitfalls/tool-behaviors/conversation-search-keyword-only-matching.md" },
+      "code":      { status: "missing", reason: "Not available on Claude Code (no past-chat search at all)." },
+      "desktop":   { status: "missing", reason: "Not available on Claude Desktop with keyword search.", href: REPO + "/pitfalls/cross-platform/past-chat-search-three-shapes.md" }
+    }
+  },
+  {
+    id: "recent_chats",
+    pattern: /\brecent_chats\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "`n` is capped at 20 — larger values are rejected. Paginate with `before`/`after`.", href: REPO + "/pitfalls/tool-constraints/recent-chats-max-n.md" },
+      "code":      { status: "missing", reason: "Not available; Claude Code uses file-based memory instead." },
+      "desktop":   { status: "missing", reason: "Not available with this name on Desktop." }
+    }
+  },
+  {
+    id: "present_files",
+    pattern: /\bpresent_files\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Available." },
+      "code":      { status: "missing", reason: "Not present; files written via `Write`/`Bash` are visible on the host filesystem." },
+      "desktop":   { status: "caveat",  reason: "Available but deferred — must be loaded via `ToolSearch` before calling.", href: REPO + "/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.md" }
+    }
+  },
+  {
+    id: "visualize",
+    pattern: /\bvisualize:\w+|\bshow_widget\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Inline SVG/HTML rendering available." },
+      "code":      { status: "missing", reason: "Inline visualization is absent on Claude Code — markdown is rendered, but `show_widget`-family tools are not present.", href: REPO + "/pitfalls/cross-platform/visualization-absent-on-code.md" },
+      "desktop":   { status: "ok",      reason: "Inline visualization available." }
+    }
+  },
+  {
+    id: "search_mcp_registry",
+    pattern: /\bsearch_mcp_registry\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Available." },
+      "code":      { status: "missing", reason: "MCP discovery layer is absent on Claude Code.", href: REPO + "/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md" },
+      "desktop":   { status: "caveat",  reason: "Deferred discovery — schema must be loaded via `ToolSearch` before calling.", href: REPO + "/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.md" }
+    }
+  },
+  {
+    id: "suggest_connectors",
+    pattern: /\bsuggest_connectors\b/g,
+    platforms: {
+      "claude.ai": { status: "ok",      reason: "Available." },
+      "code":      { status: "missing", reason: "Not available on Claude Code.", href: REPO + "/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md" },
+      "desktop":   { status: "missing", reason: "Not available on Claude Desktop.", href: REPO + "/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md" }
+    }
+  },
+  {
+    id: "ToolSearch",
+    pattern: /\bToolSearch\b/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "Not present — Claude.ai loads tool schemas eagerly." },
+      "code":      { status: "ok",      reason: "Available; required to load deferred MCP tool schemas before calling them.", href: REPO + "/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.md" },
+      "desktop":   { status: "ok",      reason: "Available; required to load deferred MCP tool schemas before calling them.", href: REPO + "/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.md" }
+    }
+  },
+  {
+    id: "Agent",
+    pattern: /\b(Agent tool|`Agent`|subagent_type)\b/g,
+    platforms: {
+      "claude.ai": { status: "missing", reason: "Subagent spawning is not available on Claude.ai." },
+      "code":      { status: "ok",      reason: "Available." },
+      "desktop":   { status: "caveat",  reason: "Unverified on Claude Desktop — treat as absent until confirmed." }
+    }
+  },
+  {
+    id: "references/",
+    pattern: /references\/[\w-]+\.md/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "`references/` paths do not resolve from the skill's directory — load via absolute path.", href: REPO + "/pitfalls/skill-structure/references-directory-path-resolution.md" },
+      "code":      { status: "caveat",  reason: "`references/` paths do not resolve from the skill's directory — `Read` resolves against cwd.", href: REPO + "/pitfalls/skill-structure/references-directory-path-resolution.md" },
+      "desktop":   { status: "caveat",  reason: "`references/` paths do not resolve from the skill's directory — load via absolute path.", href: REPO + "/pitfalls/skill-structure/references-directory-path-resolution.md" }
+    }
+  },
+  {
+    id: "pip install",
+    pattern: /\bpip(3)?\s+install\b/g,
+    platforms: {
+      "claude.ai": { status: "caveat",  reason: "Plain `pip install` fails with PEP 668; add `--break-system-packages` or use a venv.", href: REPO + "/pitfalls/environment/claude-ai-pip-install-break-system-packages.md" },
+      "code":      { status: "ok",      reason: "Works on the host's Python." },
+      "desktop":   { status: "caveat",  reason: "Runs inside the sandbox, not the host shell — installed packages don't affect the user's host Python.", href: REPO + "/pitfalls/environment/desktop-bash-sandboxed-not-host.md" }
+    }
+  }
+];
+
+const PLATFORMS = [
+  { key: "claude.ai", label: "Claude.ai" },
+  { key: "code",      label: "Claude Code" },
+  { key: "desktop",   label: "Claude Desktop" }
+];
+
+const EXAMPLES = {
+  "cross-platform":
+`---
+name: save-and-confirm
+description: Save the user's text to a file, confirm with a structured question.
+---
+
+When the user provides text, use the Write tool to save it to /tmp/note.md.
+Then use AskUserQuestion to confirm with up to 5 follow-up questions.
+Also load references/instructions.md for additional steps.`,
+  "claude-ai-only":
+`---
+name: claude-ai-flow
+description: Uses Claude.ai-only tools.
+---
+
+Use create_file to save the result.
+Call ask_user_input_v0 with 4 questions to elicit user choices.
+Use image_search with max_results=8 to find diagrams.
+Then visualize:show_widget the output.`,
+  "code-only":
+`---
+name: code-only-flow
+description: A skill targeting Claude Code.
+---
+
+Use Bash to run \`git commit --amend --no-verify\`.
+Use Edit with replace_all=true to rename a variable.
+Spawn an Agent subagent_type=Explore to find files.
+Call WebSearch for documentation.`
+};
+
+function detectTools(text) {
+  const hits = [];
+  for (const t of TOOLS) {
+    t.pattern.lastIndex = 0;
+    if (t.pattern.test(text)) hits.push(t);
+  }
+  return hits;
+}
+
+function statusRank(s) { return s === "missing" ? 3 : s === "caveat" ? 2 : 1; }
+function statusClass(s) { return s === "missing" ? "err" : s === "caveat" ? "warn" : "ok"; }
+function statusIcon(s)  { return s === "missing" ? "✕" : s === "caveat" ? "!" : "✓"; }
+function escapeHtml(s)  { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+// Render `backticks` as <code> inline.
+function renderInline(s) { return escapeHtml(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+
+function render(text) {
+  const hits = detectTools(text);
+
+  // Detected chips
+  const detected = document.getElementById("detected");
+  detected.innerHTML = hits.length
+    ? "Detected tools: " + hits.map(h => `<span class="chip">${escapeHtml(h.id)}</span>`).join("")
+    : (text.trim() ? '<em>No catalogued tools detected in the input.</em>' : '');
+
+  // Summary cards — overall verdict per platform
+  const summary = document.getElementById("summary");
+  summary.innerHTML = "";
+  for (const p of PLATFORMS) {
+    let worst = "ok";
+    let missing = 0, caveat = 0;
+    for (const t of hits) {
+      const e = t.platforms[p.key];
+      if (!e) continue;
+      if (e.status === "missing") { missing++; if (statusRank("missing") > statusRank(worst)) worst = "missing"; }
+      else if (e.status === "caveat") { caveat++; if (statusRank("caveat") > statusRank(worst)) worst = "caveat"; }
+    }
+    const verdict =
+      hits.length === 0 ? "—" :
+      worst === "missing" ? "Will likely fail" :
+      worst === "caveat"  ? "Works with caveats" :
+                            "No known issues";
+    const counts =
+      hits.length === 0 ? "Paste or upload a SKILL.md to see results." :
+      (missing === 0 && caveat === 0) ? "0 issues across " + hits.length + " detected tool" + (hits.length === 1 ? "" : "s") :
+      [
+        missing ? `<strong>${missing}</strong> missing` : null,
+        caveat  ? `<strong>${caveat}</strong> caveat${caveat === 1 ? "" : "s"}` : null
+      ].filter(Boolean).join(" · ");
+
+    summary.insertAdjacentHTML("beforeend", `
+      <div class="summary-card ${statusClass(worst)}">
+        <p class="pname">${p.label}</p>
+        <p class="pverdict">${verdict}</p>
+        <p class="pcount">${counts}</p>
+      </div>
+    `);
+  }
+
+  // Per-tool cards: one row per detected tool, showing all 3 platform badges + reasons
+  const toolList = document.getElementById("toolList");
+  toolList.innerHTML = "";
+
+  if (hits.length === 0) {
+    if (text.trim()) {
+      toolList.innerHTML = '<div class="tools-empty">No catalogued tool calls detected in this SKILL.md. That is not a guarantee it will work — it just means nothing in the current catalog matched. <a href="https://github.com/livlign/claude-skills-pitfalls">Contribute a pitfall →</a></div>';
+    }
+    return;
+  }
+
+  // Sort: tools with missing first, then caveats, then ok
+  hits.sort((a, b) => {
+    const wa = Math.max(...PLATFORMS.map(p => statusRank((a.platforms[p.key] || {}).status || "ok")));
+    const wb = Math.max(...PLATFORMS.map(p => statusRank((b.platforms[p.key] || {}).status || "ok")));
+    return wb - wa;
+  });
+
+  for (const t of hits) {
+    const badges = PLATFORMS.map(p => {
+      const e = t.platforms[p.key] || { status: "ok" };
+      const c = statusClass(e.status);
+      return `<span class="badge ${c}" title="${escapeHtml(e.reason || 'Available.')}">
+        ${statusIcon(e.status)}&nbsp;<span class="platform-label">${p.label}</span>
+      </span>`;
+    }).join("");
+
+    const reasons = PLATFORMS.map(p => {
+      const e = t.platforms[p.key];
+      if (!e) return "";
+      if (e.status === "ok") return "";
+      const c = statusClass(e.status);
+      return `<li>
+        <span class="pkey ${c}">${p.label}</span>
+        <span class="rbody">${renderInline(e.reason || "")}${e.href ? ` <a href="${e.href}" target="_blank" rel="noopener">read pitfall →</a>` : ""}</span>
+      </li>`;
+    }).join("");
+
+    toolList.insertAdjacentHTML("beforeend", `
+      <div class="tool-card">
+        <div class="tool-head">
+          <span class="tname">${escapeHtml(t.id)}</span>
+          <span class="tool-badges">${badges}</span>
+        </div>
+        ${reasons ? `<ul class="reasons">${reasons}</ul>` : '<div class="empty">No catalogued issues on any platform.</div>'}
+      </div>
+    `);
+  }
+}
+
+document.getElementById("run").addEventListener("click", () => {
+  render(document.getElementById("input").value);
+});
+document.getElementById("clear").addEventListener("click", () => {
+  document.getElementById("input").value = "";
+  document.getElementById("filename").textContent = "";
+  document.getElementById("fileinput").value = "";
+  render("");
+});
+document.getElementById("fileinput").addEventListener("change", (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    document.getElementById("filename").textContent = "(file too large; 2MB max)";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const content = ev.target.result;
+    document.getElementById("input").value = content;
+    document.getElementById("filename").textContent = file.name;
+    render(content);
+  };
+  reader.onerror = () => {
+    document.getElementById("filename").textContent = "(could not read file)";
+  };
+  reader.readAsText(file);
+});
+document.querySelectorAll(".examples button[data-example]").forEach(b => {
+  b.addEventListener("click", () => {
+    const v = EXAMPLES[b.dataset.example];
+    document.getElementById("input").value = v;
+    render(v);
+  });
+});
+
+// Live update on input, debounced. Hide stale share link when input changes.
+let t;
+document.getElementById("input").addEventListener("input", () => {
+  clearTimeout(t);
+  t = setTimeout(() => render(document.getElementById("input").value), 200);
+  document.getElementById("shareBox").hidden = true;
+});
+
+// Share link: encode skill content into the URL hash so the recipient sees
+// the same input + report when they open the link.
+//
+// Two formats:
+//   #skill2=<base64url-of-gzip>  — compressed (default for any browser with CompressionStream;
+//                                  shrinks markdown ~3-5x so multi-page SKILL.md files fit)
+//   #skill=<base64url-of-utf8>   — plain fallback for older browsers, and accepted on load
+//                                  for back-compat with previously generated links.
+const HARD_CAP = 100000;        // encoded chars — covers ~300KB raw skill after compression
+const SAFE_CAP = 8000;          // channels above this length start truncating (Discord, SMS)
+const COMFY_CAP = 4000;         // channels above this need a long-link-friendly client
+
+function b64urlEncode(bin) {
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function b64urlDecode(b64) {
+  const s = b64.replace(/-/g, "+").replace(/_/g, "/");
+  return atob(s);
+}
+function utf8ToBinary(text) { return unescape(encodeURIComponent(text)); }
+function binaryToUtf8(bin) { return decodeURIComponent(escape(bin)); }
+function bytesToBinary(bytes) {
+  // Chunk to avoid stack overflow on large inputs.
+  let bin = ""; const CHUNK = 0x8000;
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return bin;
+}
+function binaryToBytes(bin) {
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+async function encodeShare(text) {
+  if (typeof CompressionStream !== "undefined") {
+    const inputBytes = new TextEncoder().encode(text);
+    const cs = new Blob([inputBytes]).stream().pipeThrough(new CompressionStream("gzip"));
+    const buf = await new Response(cs).arrayBuffer();
+    return { tag: "skill2", encoded: b64urlEncode(bytesToBinary(new Uint8Array(buf))) };
+  }
+  return { tag: "skill", encoded: b64urlEncode(utf8ToBinary(text)) };
+}
+
+async function decodeShare(tag, encoded) {
+  try {
+    if (tag === "skill2") {
+      if (typeof DecompressionStream === "undefined") return null;
+      const bytes = binaryToBytes(b64urlDecode(encoded));
+      const ds = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+      const buf = await new Response(ds).arrayBuffer();
+      return new TextDecoder().decode(buf);
+    }
+    return binaryToUtf8(b64urlDecode(encoded));
+  } catch (e) { return null; }
+}
+
+function channelHint(urlLen) {
+  if (urlLen <= COMFY_CAP) return "Fits everywhere: email, Slack, Discord, GitHub, X (after a shortener).";
+  if (urlLen <= SAFE_CAP)  return "Fits in email, Slack, GitHub, iMessage. Discord (2000 char cap) will truncate — use a URL shortener.";
+  return "Long link — fits email and GitHub fine; will likely truncate in Discord/Slack/SMS. Use a URL shortener (bit.ly, tinyurl, is.gd) before sending.";
+}
+
+document.getElementById("share").addEventListener("click", async () => {
+  const text = document.getElementById("input").value;
+  const box = document.getElementById("shareBox");
+  const linkEl = document.getElementById("shareLink");
+  const hintEl = document.getElementById("shareHint");
+  if (!text.trim()) {
+    box.hidden = false;
+    linkEl.href = "#"; linkEl.textContent = "";
+    hintEl.textContent = "Paste or upload a SKILL.md first, then try again.";
+    return;
+  }
+  hintEl.textContent = "Encoding…";
+  box.hidden = false;
+  const shortBtn = document.getElementById("shortenShare");
+  shortBtn.disabled = false; shortBtn.textContent = "Shorten";
+  const { tag, encoded } = await encodeShare(text);
+  if (encoded.length > HARD_CAP) {
+    linkEl.href = "#"; linkEl.textContent = "";
+    hintEl.textContent = `Skill is too large to encode (${encoded.length.toLocaleString()} chars after gzip + base64; cap is ${HARD_CAP.toLocaleString()}). Trim the file, share a specific snippet, or attach the file directly.`;
+    return;
+  }
+  const url = location.origin + location.pathname + "#" + tag + "=" + encoded;
+  linkEl.href = url;
+  linkEl.textContent = url;
+  const compressionInfo = tag === "skill2"
+    ? `${text.length.toLocaleString()} char skill → ${encoded.length.toLocaleString()} char link (gzip-compressed)`
+    : `${text.length.toLocaleString()} char skill → ${encoded.length.toLocaleString()} char link (uncompressed — browser lacks CompressionStream)`;
+  hintEl.innerHTML = `<strong>Link length:</strong> ${url.length.toLocaleString()} chars · ${compressionInfo}<br>${channelHint(url.length)}`;
+});
+
+document.getElementById("copyShare").addEventListener("click", async () => {
+  const link = document.getElementById("shareLink").href;
+  if (!link || link.endsWith("#")) return;
+  const hintEl = document.getElementById("shareHint");
+  const prev = hintEl.innerHTML;
+  try {
+    await navigator.clipboard.writeText(link);
+    hintEl.textContent = "Copied to clipboard.";
+    setTimeout(() => { hintEl.innerHTML = prev; }, 1800);
+  } catch (e) {
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById("shareLink"));
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+    hintEl.textContent = "Selected — press Cmd/Ctrl+C to copy.";
+  }
+});
+
+document.getElementById("shortenShare").addEventListener("click", async () => {
+  const linkEl = document.getElementById("shareLink");
+  const hintEl = document.getElementById("shareHint");
+  const btn = document.getElementById("shortenShare");
+  const longUrl = linkEl.href;
+  if (!longUrl || longUrl.endsWith("#")) return;
+  if (longUrl.startsWith("file:")) {
+    hintEl.innerHTML = "<strong>Can't shorten a <code>file://</code> URL.</strong> Shortening only works when the page is served over http(s) — host on GitHub Pages first, then try again.";
+    return;
+  }
+  const originalLabel = btn.textContent;
+  btn.disabled = true; btn.textContent = "Shortening…";
+  try {
+    // TinyURL public API. Returns plain-text short URL. No auth, accepts long inputs,
+    // preserves URL fragments (#hash) through the redirect.
+    const api = "https://tinyurl.com/api-create.php?url=" + encodeURIComponent(longUrl);
+    const res = await fetch(api);
+    if (!res.ok) throw new Error("TinyURL responded " + res.status);
+    const short = (await res.text()).trim();
+    if (!/^https?:\/\//.test(short)) throw new Error("Unexpected response: " + short.slice(0, 120));
+    linkEl.href = short;
+    linkEl.textContent = short;
+    hintEl.innerHTML = `<strong>Shortened via tinyurl.com:</strong> ${short.length} chars — fits in any chat client (Discord, X, SMS, all of it). The long URL with your skill data is preserved as the redirect target.`;
+    btn.textContent = "Shortened";
+  } catch (e) {
+    hintEl.innerHTML = `<strong>Couldn't shorten:</strong> ${escapeHtml(e.message)}. This is usually a CORS or network issue with tinyurl.com. Workarounds: (1) copy the long link and paste it into <a href="https://tinyurl.com" target="_blank" rel="noopener">tinyurl.com</a> manually, (2) use a different shortener that handles long URLs (bit.ly with an account works), (3) send the long link as-is to channels that don't truncate (email, GitHub).`;
+    btn.disabled = false; btn.textContent = originalLabel;
+  }
+});
+
+// On page load: if URL has #skill2=... (compressed) or #skill=... (plain),
+// decode and run the report.
+(async function loadFromHash() {
+  const m = location.hash.match(/(skill2|skill)=([A-Za-z0-9_\-]+)/);
+  if (!m) return;
+  const decoded = await decodeShare(m[1], m[2]);
+  if (decoded == null) {
+    document.getElementById("filename").textContent = "(could not decode share link — browser may lack DecompressionStream)";
+    return;
+  }
+  document.getElementById("input").value = decoded;
+  document.getElementById("filename").textContent = "(loaded from share link)";
+  render(decoded);
+})();
+</script>
+</body>
+</html>
