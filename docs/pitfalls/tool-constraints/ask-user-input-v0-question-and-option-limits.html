@@ -18,15 +18,14 @@
 <link rel="stylesheet" href="../../catalog.css">
 </head>
 <body>
+<nav class="topnav"><a class="brand" href="../index.html">claude-skills-pitfalls</a><span class="navlinks"><a href="../index.html">Catalog</a><a href="../../index.html">Checker</a><a href="https://github.com/livlign/claude-skills-pitfalls">GitHub</a></span></nav>
 <div class="wrap">
-  <header class="masthead">
-    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
-    <span class="crumb"><a href="../index.html">catalog</a> / tool-constraints / ask-user-input-v0-question-and-option-limits</span>
-  </header>
-  <main>
-    <h1><code>ask_user_input_v0</code> enforces a 3-question, 4-option ceiling</h1>
-    <span class="tier tier-verified">verified</span>
-    <blockquote><p><code>ask_user_input_v0</code> on Claude.ai enforces a schema-level ceiling of 3 questions and 4 options per question; exceeding either limit fails with a validation error.</p></blockquote>
+  <div class="layout">
+    <main>
+      <p class="crumb"><a href="../index.html">catalog</a> / tool-constraints</p>
+      <h1><code>ask_user_input_v0</code> enforces a 3-question, 4-option ceiling</h1>
+      <span class="tier tier-verified">verified</span>
+      <blockquote><p><code>ask_user_input_v0</code> on Claude.ai enforces a schema-level ceiling of 3 questions and 4 options per question; exceeding either limit fails with a validation error.</p></blockquote>
 <ul>
 <li><strong>Category:</strong> tool-constraints</li>
 <li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ (tool doesn&#x27;t exist) | Claude Desktop ❌ (tool doesn&#x27;t exist)</li>
@@ -44,11 +43,19 @@
 <p>Cap questions at 3, options at 4. If elicitation needs more, chain across turns or use <code>multi_select</code> to combine. A portable skill that also targets Code/Desktop&#x27;s <code>AskUserQuestion</code> (which caps at 4 questions) must conform to the stricter limit of 3.</p>
 <h2>Notes</h2>
 <p>Related Claude.ai hard ceilings: see <a href="./image-search-result-count-bounds.html"><code>image-search-result-count-bounds.md</code></a> and <a href="./recent-chats-max-n.html"><code>recent-chats-max-n.md</code></a>. For the cross-platform tool divergence, see <a href="../cross-platform/askuserquestion-vs-ask-user-input-v0.html"><code>../cross-platform/askuserquestion-vs-ask-user-input-v0.md</code></a>.</p>
-  </main>
-  <footer class="pagefoot">
-    <span><a href="../index.html">← All pitfalls</a></span>
-    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md">Edit this page on GitHub</a></span>
-  </footer>
+      <nav class="prevnext"><span></span><a class="nx" href="../tool-constraints/image-search-result-count-bounds.html"><span class="lbl">Next</span>image_search.max_results is bounded to [3, 5]</a></nav>
+      <footer class="pagefoot">
+        <span><a href="../index.html">← All pitfalls</a></span>
+        <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md">Edit this page on GitHub</a></span>
+      </footer>
+    </main>
+    <aside class="sidebar">
+      <p class="side-title">tool-constraints</p>
+      <ul><li class="current"><a href="ask-user-input-v0-question-and-option-limits.html">ask_user_input_v0 enforces a 3-question, 4-option ceiling</a></li><li class=""><a href="image-search-result-count-bounds.html">image_search.max_results is bounded to [3, 5]</a></li><li class=""><a href="recent-chats-max-n.html">recent_chats.n caps at 20</a></li><li class=""><a href="code-bash-600-second-ceiling.html">Claude Code&#x27;s Bash documents a 600000ms (10-minute) timeout max — but does not hard-reject above it</a></li><li class=""><a href="desktop-bash-45-second-ceiling.html">Claude Desktop&#x27;s bash caps timeout_ms at 45 seconds</a></li></ul>
+      <p class="side-title">Categories</p>
+      <ul><li><a href="../index.html#cat-tool-constraints">tool-constraints</a></li><li><a href="../index.html#cat-tool-behaviors">tool-behaviors</a></li><li><a href="../index.html#cat-cross-platform">cross-platform</a></li><li><a href="../index.html#cat-environment">environment</a></li><li><a href="../index.html#cat-skill-structure">skill-structure</a></li></ul>
+    </aside>
+  </div>
 </div>
 </body>
 </html>
