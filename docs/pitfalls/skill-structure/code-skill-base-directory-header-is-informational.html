@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The &quot;Base directory for this skill&quot; header on Code is informational only — Claude skills pitfalls</title>
+<meta name="description" content="The &#x27;Base directory for this skill: &lt;path&gt;&#x27; line Claude Code injects above SKILL.md is informational only — tools do not resolve relative paths against it.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/code-skill-base-directory-header-is-informational.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The &quot;Base directory for this skill&quot; header on Code is informational only">
+<meta property="og:description" content="The &#x27;Base directory for this skill: &lt;path&gt;&#x27; line Claude Code injects above SKILL.md is informational only — tools do not resolve relative paths against it.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/code-skill-base-directory-header-is-informational.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / skill-structure / code-skill-base-directory-header-is-informational</span>
+  </header>
+  <main>
+    <h1>The &quot;Base directory for this skill&quot; header on Code is informational only</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>The &#x27;Base directory for this skill: &lt;path&gt;&#x27; line Claude Code injects above SKILL.md is informational only — tools do not resolve relative paths against it.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> skill-structure</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Misleading affordance</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md author reads the &quot;Base directory for this skill: ...&quot; line that Claude Code injects when a skill triggers and reasonably concludes relative paths will resolve from there. They don&#x27;t.</p>
+<h2>Cause</h2>
+<p>The base-directory header is text in the turn — it does NOT change the process cwd and does NOT affect how <code>Read</code> resolves relative paths. Code&#x27;s <code>Read</code> continues to resolve against the launch directory.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude Code: skill triggered with the base-directory header visible; <code>Read(&quot;references/foo.md&quot;)</code> still resolved against the user&#x27;s project directory, not the skill directory.</p>
+<h2>Fix</h2>
+<p>Treat the base-directory header as a hint to the model, not a runtime affordance. SKILL.md must instruct Claude to construct absolute paths explicitly.</p>
+<h2>Notes</h2>
+<p>The header is useful as a hint — it gives the model the string it needs to build an absolute path. But the skill author must instruct that construction. See <a href="./references-directory-path-resolution.html"><code>references-directory-path-resolution.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/skill-structure/code-skill-base-directory-header-is-informational.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

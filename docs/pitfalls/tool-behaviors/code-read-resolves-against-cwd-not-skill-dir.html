@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code&#x27;s Read resolves relative paths against cwd, not the skill directory — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Read resolves relative paths against the current working directory, not the skill&#x27;s own directory — Read(&#x27;references/foo.md&#x27;) from a skill rarely finds the file.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code&#x27;s Read resolves relative paths against cwd, not the skill directory">
+<meta property="og:description" content="Claude Code&#x27;s Read resolves relative paths against the current working directory, not the skill&#x27;s own directory — Read(&#x27;references/foo.md&#x27;) from a skill rarely finds the file.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / code-read-resolves-against-cwd-not-skill-dir</span>
+  </header>
+  <main>
+    <h1>Claude Code&#x27;s <code>Read</code> resolves relative paths against cwd, not the skill directory</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Read</code> resolves relative paths against the current working directory, not the skill&#x27;s own directory — <code>Read(&#x27;references/foo.md&#x27;)</code> from a skill rarely finds the file.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ (different failure mode — see notes) | Claude Code ✅ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent 404</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md at <code>~/.claude/skills/&lt;name&gt;/</code> that tells Claude to <code>Read(&quot;references/foo.md&quot;)</code> errors with &quot;File does not exist&quot;, and the hint message points at the user&#x27;s project directory — not the skill directory.</p>
+<h2>Cause</h2>
+<p><code>Read</code> resolves relative paths against the process working directory (where Claude Code was launched), not the skill&#x27;s own directory. The &quot;Base directory for this skill: ...&quot; header that Claude Code injects into the triggered turn is informational only — it does not <code>chdir</code>. See <a href="../skill-structure/code-skill-base-directory-header-is-informational.html"><code>../skill-structure/code-skill-base-directory-header-is-informational.md</code></a>.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude Code; re-confirmed on Opus 4.8, 2026-06-14: <code>Read(&quot;references/relative.md&quot;)</code> while cwd was a project dir → <code>File does not exist. Note: your current working directory is /Users/&lt;user&gt;/Documents/&lt;project&gt;.</code> A relative path that *does* exist under cwd (e.g. <code>Read(&quot;README.md&quot;)</code>) resolves and succeeds — confirming resolution is against cwd, not absolute-only, despite the current tool description saying paths &quot;must be absolute.&quot;</p>
+<h2>Fix</h2>
+<p>SKILL.md must instruct Claude to construct an absolute path before reading sibling resources. See <a href="../skill-structure/references-directory-path-resolution.html"><code>../skill-structure/references-directory-path-resolution.md</code></a> for the pattern.</p>
+<h2>Notes</h2>
+<p>Claude.ai&#x27;s <code>view</code> doesn&#x27;t even attempt resolution — it rejects the relative path outright. See <a href="./claude-ai-view-requires-absolute-paths.html"><code>claude-ai-view-requires-absolute-paths.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

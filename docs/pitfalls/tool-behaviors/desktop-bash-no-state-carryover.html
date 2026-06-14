@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Desktop&#x27;s bash has no state carryover between calls — Claude skills pitfalls</title>
+<meta name="description" content="On Claude Desktop, each bash call runs in a fresh shell — exported variables, cd, and background jobs from a previous call do not carry over to the next.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/desktop-bash-no-state-carryover.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Desktop&#x27;s bash has no state carryover between calls">
+<meta property="og:description" content="On Claude Desktop, each bash call runs in a fresh shell — exported variables, cd, and background jobs from a previous call do not carry over to the next.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/desktop-bash-no-state-carryover.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / desktop-bash-no-state-carryover</span>
+  </header>
+  <main>
+    <h1>Claude Desktop&#x27;s bash has no state carryover between calls</h1>
+    <span class="tier tier-schema-only">schema-only</span>
+    <blockquote><p>On Claude Desktop, each bash call runs in a fresh shell — exported variables, <code>cd</code>, and background jobs from a previous call do not carry over to the next.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ (cwd persists) | Claude Code ✅ (resets — see note) | Claude Desktop ✅</li>
+<li><strong>Verification tier:</strong> schema-only</li>
+<li><strong>Severity:</strong> Behavioral divergence</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that runs <code>cd somewhere</code> in one bash call and a follow-up command in another finds itself back at the default working directory.</p>
+<h2>Cause</h2>
+<p>On Desktop, each <code>mcp__workspace__bash</code> call is independent — no cwd carryover, no shell state, no environment-variable carryover.</p>
+<h2>Fix</h2>
+<p>Combine related shell operations into a single bash call, or pass absolute paths to every command. Don&#x27;t rely on <code>cd</code> persisting across calls.</p>
+<h2>Notes</h2>
+<p>Claude.ai&#x27;s <code>bash_tool</code> persists cwd across calls. Code&#x27;s <code>Bash</code> does <strong>not</strong> (verified on Opus 4.8, 2026-06-14 — it resets to the project directory after each call); see <a href="./code-bash-no-cwd-or-state-carryover.html"><code>code-bash-no-cwd-or-state-carryover.md</code></a>. So this non-carryover behavior affects both Desktop and Code — only Claude.ai persists cwd. Skills written and tested on Claude.ai will silently misbehave on the other two.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/desktop-bash-no-state-carryover.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

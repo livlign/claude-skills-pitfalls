@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCP tool schemas are deferred on Claude Code and Desktop — Claude skills pitfalls</title>
+<meta name="description" content="MCP tool schemas are not loaded by default on Claude Code and Desktop — calling them without first fetching the schema fails with an InputValidationError.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP tool schemas are deferred on Claude Code and Desktop">
+<meta property="og:description" content="MCP tool schemas are not loaded by default on Claude Code and Desktop — calling them without first fetching the schema fails with an InputValidationError.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / mcp-tools-deferred-on-code-and-desktop</span>
+  </header>
+  <main>
+    <h1>MCP tool schemas are deferred on Claude Code and Desktop</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>MCP tool schemas are not loaded by default on Claude Code and Desktop — calling them without first fetching the schema fails with an InputValidationError.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ (eager) | Claude Code ✅ (deferred) | Claude Desktop ✅ (deferred)</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that calls an MCP tool directly on Code/Desktop hits <code>InputValidationError</code> even though the tool is visible by name in the inventory.</p>
+<h2>Cause</h2>
+<p>On Code and Desktop, MCP tool schemas are NOT loaded at session start. They appear by name only — schemas are &quot;deferred.&quot; Calling one without first loading via <code>ToolSearch select:&lt;name&gt;</code> raises <code>InputValidationError</code>. Claude.ai loads them eagerly.</p>
+<h2>Fix</h2>
+<p>SKILL.md targeting Code/Desktop should not assume an MCP tool is immediately callable. Either instruct Claude to <code>ToolSearch</code> first, or describe the capability and let Claude handle the loading.</p>
+<h2>Notes</h2>
+<p>Related: <a href="./mcp-tool-name-format-diverges.html"><code>mcp-tool-name-format-diverges.md</code></a>, <a href="./mcp-discovery-layer-absent-on-code.html"><code>mcp-discovery-layer-absent-on-code.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/mcp-tools-deferred-on-code-and-desktop.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

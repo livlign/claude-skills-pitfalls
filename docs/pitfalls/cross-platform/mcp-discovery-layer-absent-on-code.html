@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCP discovery (search_mcp_registry, suggest_connectors) is absent on Claude Code — Claude skills pitfalls</title>
+<meta name="description" content="search_mcp_registry and suggest_connectors exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP discovery (search_mcp_registry, suggest_connectors) is absent on Claude Code">
+<meta property="og:description" content="search_mcp_registry and suggest_connectors exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / mcp-discovery-layer-absent-on-code</span>
+  </header>
+  <main>
+    <h1>MCP discovery (<code>search_mcp_registry</code>, <code>suggest_connectors</code>) is absent on Claude Code</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p><code>search_mcp_registry</code> and <code>suggest_connectors</code> exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅ (deferred)</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Feature gap</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that relies on <code>search_mcp_registry</code> or <code>suggest_connectors</code> to route the user to a connector silently no-ops on Claude Code.</p>
+<h2>Cause</h2>
+<p>Claude Code has no MCP discovery layer. Those tools don&#x27;t exist there. Discovery happens implicitly: Claude reads the startup MCP-server list and infers what&#x27;s available. Skills that depend on the discovery flow for routing only work on Claude.ai (with an opt-in gate) and Desktop (deferred).</p>
+<h2>Fix</h2>
+<p>For portable skills, don&#x27;t expect the platform to handle connector picking. Use the platform&#x27;s elicitation tool (<code>AskUserQuestion</code> / <code>ask_user_input_v0</code>) to ask the user explicitly inside the skill body.</p>
+<h2>Notes</h2>
+<p>Related: <a href="./dont-assume-instructions-unenforceable-without-picker.html"><code>dont-assume-instructions-unenforceable-without-picker.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

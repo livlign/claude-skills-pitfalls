@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude.ai&#x27;s view rejects relative paths and bare filenames — Claude skills pitfalls</title>
+<meta name="description" content="Claude.ai&#x27;s view tool rejects relative paths and bare filenames with a validation error; only absolute paths starting at / work.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/claude-ai-view-requires-absolute-paths.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude.ai&#x27;s view rejects relative paths and bare filenames">
+<meta property="og:description" content="Claude.ai&#x27;s view tool rejects relative paths and bare filenames with a validation error; only absolute paths starting at / work.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/claude-ai-view-requires-absolute-paths.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / claude-ai-view-requires-absolute-paths</span>
+  </header>
+  <main>
+    <h1>Claude.ai&#x27;s <code>view</code> rejects relative paths and bare filenames</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude.ai&#x27;s <code>view</code> tool rejects relative paths and bare filenames with a validation error; only absolute paths starting at <code>/</code> work.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❌</li>
+<li><strong>Verified on:</strong> Claude.ai web, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that tells Claude.ai to view a relatively-named file errors. No silent resolution attempt — the tool refuses outright.</p>
+<h2>Cause</h2>
+<p><code>view</code>&#x27;s description requires an absolute path and includes the realpath hint verbatim in its error.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude.ai web: <code>view(&quot;references/foo.md&quot;)</code> → <code>references/foo.md is not an absolute path. Run realpath references/foo.md to get the absolute path, then view that.</code></p>
+<h2>Fix</h2>
+<p>Always pass absolute paths to <code>view</code>. If a SKILL.md uses a relative path, instruct Claude to resolve it first via <code>bash_tool</code> (<code>realpath</code> or <code>readlink -f</code>).</p>
+<h2>Notes</h2>
+<p>See also <a href="./code-read-resolves-against-cwd-not-skill-dir.html"><code>code-read-resolves-against-cwd-not-skill-dir.md</code></a> for the Code-side analogue, and <a href="../skill-structure/references-directory-path-resolution.html"><code>../skill-structure/references-directory-path-resolution.md</code></a> for the full skill-structure implication.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/claude-ai-view-requires-absolute-paths.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

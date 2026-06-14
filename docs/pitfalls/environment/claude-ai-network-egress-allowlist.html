@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude.ai&#x27;s bash has an HTTPS egress allowlist — Claude skills pitfalls</title>
+<meta name="description" content="Claude.ai&#x27;s bash environment can only reach an allowlisted set of HTTPS hosts; curl to arbitrary domains fails with a network error, not a DNS error.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/environment/claude-ai-network-egress-allowlist.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude.ai&#x27;s bash has an HTTPS egress allowlist">
+<meta property="og:description" content="Claude.ai&#x27;s bash environment can only reach an allowlisted set of HTTPS hosts; curl to arbitrary domains fails with a network error, not a DNS error.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/environment/claude-ai-network-egress-allowlist.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / environment / claude-ai-network-egress-allowlist</span>
+  </header>
+  <main>
+    <h1>Claude.ai&#x27;s bash has an HTTPS egress allowlist</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude.ai&#x27;s bash environment can only reach an allowlisted set of HTTPS hosts; <code>curl</code> to arbitrary domains fails with a network error, not a DNS error.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> environment</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ (open network) | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude.ai web, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that runs <code>curl</code> against an arbitrary URL from <code>bash_tool</code> on Claude.ai gets HTTP 403 with <code>x-deny-reason: host_not_allowed</code>.</p>
+<h2>Cause</h2>
+<p><code>bash_tool</code> network egress is allowlisted. Only certain domains are reachable (npm, pypi, github, anthropic, ubuntu, crates, and similar). Arbitrary fetches fail.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude.ai web: <code>curl https://example.com</code> from <code>bash_tool</code> → HTTP 403, <code>x-deny-reason: host_not_allowed</code>.</p>
+<h2>Fix</h2>
+<p>Use <code>web_fetch</code> for arbitrary HTTPS GETs on Claude.ai (it has different, broader allowlisting), or rewrite the skill to depend only on allowlisted domains. Code has open network egress; Desktop&#x27;s bash is sandboxed (verify before assuming).</p>
+<h2>Notes</h2>
+<p>Related: <a href="../cross-platform/bash-tool-three-shapes.html"><code>../cross-platform/bash-tool-three-shapes.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/environment/claude-ai-network-egress-allowlist.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

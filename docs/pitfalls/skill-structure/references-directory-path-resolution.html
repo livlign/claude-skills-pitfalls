@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>references/foo.md doesn&#x27;t resolve from the skill&#x27;s directory — Claude skills pitfalls</title>
+<meta name="description" content="The references/foo.md pattern recommended by skill-creator does not resolve relative to the skill&#x27;s own directory at runtime — you must construct the absolute path yourself.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/references-directory-path-resolution.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="references/foo.md doesn&#x27;t resolve from the skill&#x27;s directory">
+<meta property="og:description" content="The references/foo.md pattern recommended by skill-creator does not resolve relative to the skill&#x27;s own directory at runtime — you must construct the absolute path yourself.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/references-directory-path-resolution.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / skill-structure / references-directory-path-resolution</span>
+  </header>
+  <main>
+    <h1><code>references/foo.md</code> doesn&#x27;t resolve from the skill&#x27;s directory</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>The <code>references/foo.md</code> pattern recommended by skill-creator does not resolve relative to the skill&#x27;s own directory at runtime — you must construct the absolute path yourself.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> skill-structure</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ✅ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude.ai web 2026-05-17, Claude Code 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error (Claude.ai), Silent 404 (Code)</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that says &quot;read <code>references/spec.md</code>&quot; fails. On Claude.ai, the <code>view</code> tool rejects the relative path. On Claude Code, <code>Read</code> resolves the path against the process working directory and returns &quot;File does not exist&quot;.</p>
+<h2>Cause</h2>
+<p>Both platforms&#x27; file-reading tools require absolute paths. Neither resolves relative paths against the skill&#x27;s own directory. There is no <code>$SKILL_DIR</code> variable. On Code, the &quot;Base directory for this skill: ...&quot; line injected into the triggered turn is informational only — see <a href="./code-skill-base-directory-header-is-informational.html"><code>code-skill-base-directory-header-is-informational.md</code></a>.</p>
+<h2>Reproduction</h2>
+<p>Skill at <code>~/.claude/skills/path-test/</code> with <code>references/relative.md</code> containing <code>RELATIVE_PATH_RESOLVED</code>. SKILL.md tells Claude to read <code>references/relative.md</code>. Reproduced 2026-05-17:</p>
+<ul>
+<li>Claude.ai: <code>view(&quot;references/relative.md&quot;)</code> → <code>references/relative.md is not an absolute path. Run realpath references/relative.md to get the absolute path, then view that.</code></li>
+<li>Claude Code: <code>Read(&quot;references/relative.md&quot;)</code> → <code>File does not exist. Note: your current working directory is /Users/&lt;user&gt;/Documents/&lt;project&gt;.</code></li>
+<li>Both: absolute paths work.</li>
+</ul>
+<h2>Fix</h2>
+<p>SKILL.md must instruct Claude to construct an absolute path before reading sibling resources. Example:</p>
+<blockquote><p>Determine the absolute path of this skill&#x27;s directory (look for <code>SKILL.md</code> adjacent to <code>references/</code>). Read <code>&lt;that path&gt;/references/spec.md</code> using an absolute path.</p></blockquote>
+<h2>Notes</h2>
+<p>This pitfall contradicts the <code>references/</code> progressive-disclosure pattern recommended by Anthropic&#x27;s <code>skill-creator</code>. The pattern is sound in principle but requires the model to construct absolute paths at runtime. Worth filing upstream — a <code>$SKILL_DIR</code> variable or skill-relative path support in <code>view</code> / <code>Read</code> would close the gap.</p>
+<p>Related: <a href="../tool-behaviors/claude-ai-view-requires-absolute-paths.html"><code>../tool-behaviors/claude-ai-view-requires-absolute-paths.md</code></a>, <a href="../tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.html"><code>../tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/skill-structure/references-directory-path-resolution.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

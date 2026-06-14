@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>conversation_search is keyword-only; meta-words poison results — Claude skills pitfalls</title>
+<meta name="description" content="conversation_search does keyword matching, not semantic search; meta-words like &#x27;conversation&#x27; or &#x27;chat&#x27; in your query poison the results and surface unrelated hits.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/conversation-search-keyword-only-matching.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="conversation_search is keyword-only; meta-words poison results">
+<meta property="og:description" content="conversation_search does keyword matching, not semantic search; meta-words like &#x27;conversation&#x27; or &#x27;chat&#x27; in your query poison the results and surface unrelated hits.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/conversation-search-keyword-only-matching.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / conversation-search-keyword-only-matching</span>
+  </header>
+  <main>
+    <h1><code>conversation_search</code> is keyword-only; meta-words poison results</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p><code>conversation_search</code> does keyword matching, not semantic search; meta-words like &#x27;conversation&#x27; or &#x27;chat&#x27; in your query poison the results and surface unrelated hits.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude.ai web, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent semantic failure</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that searches past chats for &quot;what we discussed yesterday&quot; returns plausible-looking but wrong chats — often from weeks or months prior.</p>
+<h2>Cause</h2>
+<p><code>conversation_search</code> matches keywords literally — including meta-words like &quot;discussed&quot; or &quot;yesterday&quot; that describe the act of having a conversation rather than its content. Any past chat containing those literal tokens scores well.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude.ai web: query <code>&quot;discussed yesterday&quot;</code> returned chats from weeks and months prior, none of which were from yesterday.</p>
+<h2>Fix</h2>
+<p>Queries must contain *content nouns* from the original conversation, not words that describe the meta. &quot;Discussed&quot; and &quot;yesterday&quot; are meta; &quot;Atlassian&quot;, &quot;Lambda OutOfMemory&quot;, &quot;Lighthouse ProductHub&quot; are content. For time-windowed retrieval, use <code>recent_chats</code> instead.</p>
+<h2>Notes</h2>
+<p>For the cross-platform shape of past-chat search, see <a href="../cross-platform/past-chat-search-three-shapes.html"><code>../cross-platform/past-chat-search-three-shapes.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/conversation-search-keyword-only-matching.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

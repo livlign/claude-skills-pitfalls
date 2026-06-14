@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code&#x27;s Bash does not persist cwd or shell state between calls — Claude skills pitfalls</title>
+<meta name="description" content="On Claude Code, each Bash call effectively starts in the project working directory with a fresh shell — a cd in one call, and exported variables, do not carry over to the next. The harness resets cwd back to the project directory after every call.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code&#x27;s Bash does not persist cwd or shell state between calls">
+<meta property="og:description" content="On Claude Code, each Bash call effectively starts in the project working directory with a fresh shell — a cd in one call, and exported variables, do not carry over to the next. The harness resets cwd back to the project directory after every call.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / code-bash-no-cwd-or-state-carryover</span>
+  </header>
+  <main>
+    <h1>Claude Code&#x27;s <code>Bash</code> does not persist cwd or shell state between calls</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>On Claude Code, each <code>Bash</code> call effectively starts in the project working directory with a fresh shell — a <code>cd</code> in one call, and exported variables, do not carry over to the next. The harness resets cwd back to the project directory after every call.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ (cwd persists) | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Behavioral divergence</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that runs <code>cd somewhere</code> (or <code>export VAR=…</code>) in one <code>Bash</code> call and a follow-up command in another finds itself back in the project directory with the variable unset.</p>
+<h2>Cause</h2>
+<p>After each <code>Bash</code> call, Claude Code resets the working directory to the project root — it even emits a <code>Shell cwd was reset to &lt;project dir&gt;</code> notice. Shell state (environment variables, functions) is likewise not carried between calls. This contradicts the once-common assumption (including earlier versions of this catalog) that Code&#x27;s <code>Bash</code> persists cwd across calls; as of Opus 4.8 it does not.</p>
+<h2>Reproduction</h2>
+<pre><code># Call 1 — cd into /tmp
+$ cd /tmp; pwd
+/tmp
+Shell cwd was reset to /Users/linh/Documents/prjs/claude-skills-pitfalls
+
+# Call 2 — separate call, back in the project dir
+$ pwd
+/Users/linh/Documents/prjs/claude-skills-pitfalls</code></pre>
+<p>Environment variables behave the same way:</p>
+<pre><code># Call 1
+$ export PROBE_VAR=hello; echo &quot;$PROBE_VAR&quot;
+hello
+
+# Call 2 — separate call
+$ echo &quot;&#x27;${PROBE_VAR:-&lt;empty&gt;}&#x27;&quot;
+&#x27;&lt;empty&gt;&#x27;</code></pre>
+<h2>Fix</h2>
+<p>Combine related shell operations into a single <code>Bash</code> call (chained with <code>&amp;&amp;</code>), or pass absolute paths to every command. Don&#x27;t rely on <code>cd</code> or <code>export</code> persisting across calls. This is the same defensive pattern that portable skills already need for Claude Desktop.</p>
+<h2>Notes</h2>
+<p>The Code environment hint says &quot;Working directory persists between calls&quot; — in practice that means each call *returns to* the project directory, not that your <code>cd</code> is remembered. Claude.ai&#x27;s <code>bash_tool</code> does persist cwd; the parallel Desktop behavior is documented in <a href="./desktop-bash-no-state-carryover.html"><code>desktop-bash-no-state-carryover.md</code></a>. Because both Code and Desktop reset between calls, a skill that relies on carryover misbehaves on two of three platforms.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

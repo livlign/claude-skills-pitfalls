@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>image_search.max_results is bounded to [3, 5] — Claude skills pitfalls</title>
+<meta name="description" content="image_search.max_results is bounded to the range [3, 5]; values outside that window are rejected by the tool&#x27;s schema validation.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/image-search-result-count-bounds.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="image_search.max_results is bounded to [3, 5]">
+<meta property="og:description" content="image_search.max_results is bounded to the range [3, 5]; values outside that window are rejected by the tool&#x27;s schema validation.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/image-search-result-count-bounds.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-constraints / image-search-result-count-bounds</span>
+  </header>
+  <main>
+    <h1><code>image_search.max_results</code> is bounded to [3, 5]</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p><code>image_search.max_results</code> is bounded to the range [3, 5]; values outside that window are rejected by the tool&#x27;s schema validation.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-constraints</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ (tool doesn&#x27;t exist) | Claude Desktop ❌ (tool doesn&#x27;t exist)</li>
+<li><strong>Verified on:</strong> Claude.ai web, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that calls <code>image_search</code> with <code>max_results=2</code> or <code>max_results=10</code> fails with a Pydantic-style validation error.</p>
+<h2>Cause</h2>
+<p>The schema requires <code>max_results &gt;= 3</code> and <code>max_results &lt;= 5</code>.</p>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude.ai web: <code>image_search(..., max_results=2)</code> → <code>Input should be greater than or equal to 3</code>.</p>
+<h2>Fix</h2>
+<p>Always pass 3, 4, or 5.</p>
+<h2>Notes</h2>
+<p>Sibling Claude.ai ceilings: <a href="./recent-chats-max-n.html"><code>recent-chats-max-n.md</code></a>, <a href="./ask-user-input-v0-question-and-option-limits.html"><code>ask-user-input-v0-question-and-option-limits.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-constraints/image-search-result-count-bounds.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

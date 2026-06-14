@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>&quot;Don&#x27;t assume which tool to use&quot; is unenforceable without an in-skill picker — Claude skills pitfalls</title>
+<meta name="description" content="Telling the model &#x27;don&#x27;t assume which tool to use&#x27; in SKILL.md doesn&#x27;t reliably prevent assumption — only an explicit AskUserQuestion/ask_user_input_v0 picker does.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/dont-assume-instructions-unenforceable-without-picker.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&quot;Don&#x27;t assume which tool to use&quot; is unenforceable without an in-skill picker">
+<meta property="og:description" content="Telling the model &#x27;don&#x27;t assume which tool to use&#x27; in SKILL.md doesn&#x27;t reliably prevent assumption — only an explicit AskUserQuestion/ask_user_input_v0 picker does.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/dont-assume-instructions-unenforceable-without-picker.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / dont-assume-instructions-unenforceable-without-picker</span>
+  </header>
+  <main>
+    <h1>&quot;Don&#x27;t assume which tool to use&quot; is unenforceable without an in-skill picker</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Telling the model &#x27;don&#x27;t assume which tool to use&#x27; in SKILL.md doesn&#x27;t reliably prevent assumption — only an explicit <code>AskUserQuestion</code>/<code>ask_user_input_v0</code> picker does.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ❓ | Claude Code ✅ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent UX divergence</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that instructs &quot;do not assume which tool to use; let the user pick&quot; runs on Code with multiple connected MCP servers, and Claude silently picks one — overriding the SKILL.md instruction.</p>
+<h2>Cause</h2>
+<p>There is no platform-level picker UI on Code. With multiple candidates available, the model infers from inventory and proceeds. Verified 2026-05-17: with several MCP servers connected, Claude picked Atlassian without surfacing the choice to the user despite the SKILL.md saying not to assume.</p>
+<h2>Fix</h2>
+<p>If user choice matters to the skill, the skill body itself must invoke an elicitation tool (<code>AskUserQuestion</code> / <code>ask_user_input_v0</code>) with the candidate options. Don&#x27;t delegate the choice to &quot;the platform.&quot;</p>
+<h2>Notes</h2>
+<p>Related: <a href="./mcp-discovery-layer-absent-on-code.html"><code>mcp-discovery-layer-absent-on-code.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/dont-assume-instructions-unenforceable-without-picker.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

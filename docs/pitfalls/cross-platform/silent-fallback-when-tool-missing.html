@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skills fail silently when their named tool doesn&#x27;t exist — Claude skills pitfalls</title>
+<meta name="description" content="When a skill names a tool that doesn&#x27;t exist on the current platform, the model silently substitutes an approximation instead of erroring — output looks plausible but is wrong.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/silent-fallback-when-tool-missing.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Skills fail silently when their named tool doesn&#x27;t exist">
+<meta property="og:description" content="When a skill names a tool that doesn&#x27;t exist on the current platform, the model silently substitutes an approximation instead of erroring — output looks plausible but is wrong.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/silent-fallback-when-tool-missing.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / silent-fallback-when-tool-missing</span>
+  </header>
+  <main>
+    <h1>Skills fail silently when their named tool doesn&#x27;t exist</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>When a skill names a tool that doesn&#x27;t exist on the current platform, the model silently substitutes an approximation instead of erroring — output looks plausible but is wrong.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent fallback</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md authored against one platform&#x27;s tool names runs on another platform and produces plausible-looking output — but the named tool was never called. The author doesn&#x27;t see an error; tests that only check for &quot;did the conversation succeed?&quot; pass.</p>
+<h2>Cause</h2>
+<p>When a SKILL.md instructs Claude to call a tool that doesn&#x27;t exist on the running platform, Claude does NOT error. Two observed shapes:</p>
+<ul>
+<li>On Claude Code, the model falls back to prose. Verified 2026-05-17: 6 of 7 Claude.ai-only tools tested produced no error; the model substituted natural-language output.</li>
+<li>On Claude.ai, the model silently substitutes a similar-named tool with different parameters, discarding fields the analogue doesn&#x27;t support.</li>
+</ul>
+<h2>Reproduction</h2>
+<p>Reproduced 2026-05-17 on Claude Code: SKILL.md instructing <code>image_search(...)</code>, <code>visualize:show_widget(...)</code>, and other Claude.ai-only tools. Model produced prose answers; no tool call errors surfaced.</p>
+<h2>Fix</h2>
+<p>CI/smoke tests for skills must assert that the *expected tool was actually called*, not just that the conversation produced plausible output. Test on every target platform, not just one.</p>
+<h2>Notes</h2>
+<p>This is the meta-pitfall behind most of the cross-platform catalog. Related: <a href="./mcp-tool-name-format-diverges.html"><code>mcp-tool-name-format-diverges.md</code></a>, <a href="../skill-structure/tool-names-as-instructions-non-portable.html"><code>../skill-structure/tool-names-as-instructions-non-portable.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/silent-fallback-when-tool-missing.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

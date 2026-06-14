@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edits to an already-loaded SKILL.md do not hot-reload mid-session (Claude Code) — Claude skills pitfalls</title>
+<meta name="description" content="On Claude Code, *new* skill directories hot-load on the next turn — but edits to the body of an already-loaded SKILL.md are not picked up mid-session. The content is cached at first load; a session restart is required to see changes.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/skill-md-edit-no-hot-reload.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Edits to an already-loaded SKILL.md do not hot-reload mid-session (Claude Code)">
+<meta property="og:description" content="On Claude Code, *new* skill directories hot-load on the next turn — but edits to the body of an already-loaded SKILL.md are not picked up mid-session. The content is cached at first load; a session restart is required to see changes.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/skill-md-edit-no-hot-reload.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / skill-structure / skill-md-edit-no-hot-reload</span>
+  </header>
+  <main>
+    <h1>Edits to an already-loaded SKILL.md do not hot-reload mid-session (Claude Code)</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>On Claude Code, *new* skill directories hot-load on the next turn — but <strong>edits to the body of an already-loaded SKILL.md are not picked up mid-session</strong>. The content is cached at first load; a session restart is required to see changes.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> skill-structure</li>
+<li><strong>Applies to:</strong> Claude.ai ❓ | Claude Code ✅ | Claude Desktop ❓</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Stale content / silent</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill author edits a SKILL.md that has already been triggered once in the current session, re-triggers the skill, and sees the *old* instructions take effect — silently. Nothing signals that the injected content is stale.</p>
+<h2>Cause</h2>
+<p>Claude Code caches a skill&#x27;s body at first load for the session. Subsequent invocations inject the cached content, not the current on-disk file. This is the opposite of the *new-directory* case, where a freshly added skill is hot-loaded on the next turn (see <a href="./code-skill-directory-hot-load-works.html"><code>code-skill-directory-hot-load-works.md</code></a>).</p>
+<h2>Reproduction</h2>
+<p>Reproduced on Claude Code (Opus 4.8), 2026-06-14:</p>
+<pre><code>1. Create ~/.claude/skills/pitfall-hotreload-test/SKILL.md whose body says
+   &quot;output exactly: MARKER-VERSION-ONE&quot;.
+2. Invoke the skill → it hot-loads and injects MARKER-VERSION-ONE.
+3. Edit the SKILL.md body in place: MARKER-VERSION-ONE → MARKER-VERSION-TWO
+   (confirmed on disk with grep).
+4. Invoke the same skill again → it injects MARKER-VERSION-ONE (the cached,
+   pre-edit content), NOT version two.</code></pre>
+<p>The on-disk file held <code>MARKER-VERSION-TWO</code>, yet the second invocation still served <code>MARKER-VERSION-ONE</code> — proving the body is cached at first load.</p>
+<h2>Fix</h2>
+<p>After editing an already-triggered SKILL.md, restart the Claude Code session (or start a fresh conversation) before relying on the new content. During iterative authoring, don&#x27;t trust mid-session re-triggers to reflect your latest edits.</p>
+<h2>Notes</h2>
+<p>Claude.ai and Desktop are not yet tested for this case (<code>❓</code>). The companion positive finding — that *new* skill directories are hot-loaded without a restart — is in <a href="./code-skill-directory-hot-load-works.html"><code>code-skill-directory-hot-load-works.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/skill-structure/skill-md-edit-no-hot-reload.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

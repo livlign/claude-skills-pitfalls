@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Desktop&#x27;s bash caps timeout_ms at 45 seconds — Claude skills pitfalls</title>
+<meta name="description" content="Claude Desktop&#x27;s bash tool caps timeout_ms at 45000 — values above 45 seconds are silently clamped, and long-running commands die mid-execution.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/desktop-bash-45-second-ceiling.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Desktop&#x27;s bash caps timeout_ms at 45 seconds">
+<meta property="og:description" content="Claude Desktop&#x27;s bash tool caps timeout_ms at 45000 — values above 45 seconds are silently clamped, and long-running commands die mid-execution.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/desktop-bash-45-second-ceiling.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-constraints / desktop-bash-45-second-ceiling</span>
+  </header>
+  <main>
+    <h1>Claude Desktop&#x27;s bash caps <code>timeout_ms</code> at 45 seconds</h1>
+    <span class="tier tier-schema-only">schema-only</span>
+    <blockquote><p>Claude Desktop&#x27;s bash tool caps <code>timeout_ms</code> at 45000 — values above 45 seconds are silently clamped, and long-running commands die mid-execution.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-constraints</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ❌ | Claude Desktop ✅</li>
+<li><strong>Verification tier:</strong> schema-only</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that runs long-running shell work on Claude Desktop (npm install, build pipelines, anything slow) is killed mid-run.</p>
+<h2>Cause</h2>
+<p><code>mcp__workspace__bash</code>&#x27;s schema caps <code>timeout_ms</code> at 45000 (45 seconds). Not documented in user-facing material.</p>
+<h2>Fix</h2>
+<p>For long-running tasks, break work into smaller bash calls or trigger it via a different mechanism. Don&#x27;t assume Desktop&#x27;s bash has the same patience as Code&#x27;s <code>Bash</code> (600s) or Claude.ai&#x27;s <code>bash_tool</code>.</p>
+<h2>Notes</h2>
+<p>For the broader cross-platform bash divergence, see <a href="../cross-platform/bash-tool-three-shapes.html"><code>../cross-platform/bash-tool-three-shapes.md</code></a>. Sibling ceiling on Code: <a href="./code-bash-600-second-ceiling.html"><code>code-bash-600-second-ceiling.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-constraints/desktop-bash-45-second-ceiling.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

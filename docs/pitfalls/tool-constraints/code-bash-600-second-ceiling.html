@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code&#x27;s Bash documents a 600000ms (10-minute) timeout max — but does not hard-reject above it — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Bash tool description states timeout maxes at 600000ms (10 minutes). Empirically, passing a higher value is not rejected — the call is silently accepted (clamped or ignored), so the documented ceiling is not a hard gate.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/code-bash-600-second-ceiling.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code&#x27;s Bash documents a 600000ms (10-minute) timeout max — but does not hard-reject above it">
+<meta property="og:description" content="Claude Code&#x27;s Bash tool description states timeout maxes at 600000ms (10 minutes). Empirically, passing a higher value is not rejected — the call is silently accepted (clamped or ignored), so the documented ceiling is not a hard gate.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-constraints/code-bash-600-second-ceiling.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-constraints / code-bash-600-second-ceiling</span>
+  </header>
+  <main>
+    <h1>Claude Code&#x27;s <code>Bash</code> documents a 600000ms (10-minute) <code>timeout</code> max — but does not hard-reject above it</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Bash</code> tool description states <code>timeout</code> maxes at 600000ms (10 minutes). Empirically, passing a higher value is <strong>not</strong> rejected — the call is silently accepted (clamped or ignored), so the documented ceiling is not a hard gate.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-constraints</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent clamp</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that hardcodes a long bash timeout on Claude Code expects either a 10-minute cap or a rejection above it. Neither assumption is safe to rely on: the documented max is 600000ms, but values above it are accepted without error rather than rejected.</p>
+<h2>Cause</h2>
+<p><code>Bash</code>&#x27;s tool description states the <code>timeout</code> parameter maxes at 600000ms (10 minutes). The earlier inference here — that values above the ceiling are rejected by the schema — was incorrect. In practice the call succeeds; the over-limit value is silently clamped or ignored rather than producing a validation error. The effective wall-clock ceiling for a foreground command is still bounded, so genuinely long work must be backgrounded.</p>
+<h2>Reproduction</h2>
+<p>Passing <code>timeout: 700000</code> (above the documented 600000 max):</p>
+<pre><code>Bash(command=&quot;echo &#x27;this should never run if the schema rejects the call&#x27;&quot;, timeout=700000)
+→ this should never run if the schema rejects the call</code></pre>
+<p>The command runs normally — no <code>InputValidationError</code>, no rejection. (The reproduction does not distinguish silent clamping from silently honoring the value; it only establishes that over-limit timeouts are <strong>not</strong> rejected.)</p>
+<h2>Fix</h2>
+<p>Don&#x27;t rely on the timeout value to bound long work, and don&#x27;t expect an over-limit timeout to surface an error. For anything that may exceed ~10 minutes, use <code>run_in_background: true</code> and poll via the appropriate harness mechanism, or split the command.</p>
+<h2>Notes</h2>
+<p>Claude.ai&#x27;s <code>bash_tool</code> doesn&#x27;t expose a timeout parameter; Desktop&#x27;s bash caps at 45s — see <a href="./desktop-bash-45-second-ceiling.html"><code>desktop-bash-45-second-ceiling.md</code></a>. A skill that hardcodes a long timeout works only on Code, and even there should not assume the documented max is enforced as a hard gate.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-constraints/code-bash-600-second-ceiling.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

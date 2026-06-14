@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Desktop&#x27;s bash runs in a sandbox, not the user&#x27;s real filesystem — Claude skills pitfalls</title>
+<meta name="description" content="Claude Desktop&#x27;s bash runs in a Docker-based sandbox, not the user&#x27;s real macOS/Windows shell — ~, host paths, and host-installed binaries are not present.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/environment/desktop-bash-sandboxed-not-host.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Desktop&#x27;s bash runs in a sandbox, not the user&#x27;s real filesystem">
+<meta property="og:description" content="Claude Desktop&#x27;s bash runs in a Docker-based sandbox, not the user&#x27;s real macOS/Windows shell — ~, host paths, and host-installed binaries are not present.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/environment/desktop-bash-sandboxed-not-host.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / environment / desktop-bash-sandboxed-not-host</span>
+  </header>
+  <main>
+    <h1>Claude Desktop&#x27;s bash runs in a sandbox, not the user&#x27;s real filesystem</h1>
+    <span class="tier tier-schema-only">schema-only</span>
+    <blockquote><p>Claude Desktop&#x27;s bash runs in a Docker-based sandbox, not the user&#x27;s real macOS/Windows shell — <code>~</code>, host paths, and host-installed binaries are not present.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> environment</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ (separate sandbox) | Claude Code ❌ (host filesystem) | Claude Desktop ✅</li>
+<li><strong>Verification tier:</strong> schema-only</li>
+<li><strong>Severity:</strong> Functional gap</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that references <code>~/Documents/...</code> or other host paths works on Claude Code (real home dir) and fails on Claude Desktop (no real home; the workspace is a fresh sandbox).</p>
+<h2>Cause</h2>
+<p>Desktop&#x27;s <code>mcp__workspace__bash</code> runs in an isolated sandbox at <code>/sessions/&lt;id&gt;/mnt/</code>, not the user&#x27;s real filesystem. Code&#x27;s <code>Bash</code> runs on the host.</p>
+<h2>Fix</h2>
+<p>Skills assuming &quot;the user&#x27;s real filesystem&quot; only work on Code. For portable file workflows on Desktop, expect mounted folders under <code>/sessions/.../mnt/</code> and use <code>request_cowork_directory</code> to discover paths.</p>
+<h2>Notes</h2>
+<p>Related: <a href="../cross-platform/bash-tool-three-shapes.html"><code>../cross-platform/bash-tool-three-shapes.md</code></a>, <a href="../tool-behaviors/desktop-bash-no-state-carryover.html"><code>../tool-behaviors/desktop-bash-no-state-carryover.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/environment/desktop-bash-sandboxed-not-host.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>
