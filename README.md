@@ -1,5 +1,7 @@
 # claude-skills-pitfalls
 
+**A catalog of why Claude skills (`SKILL.md`) silently break across Claude Code, Claude.ai, and Claude Desktop — and how to fix each one.** Covers hidden tool limits, cross-platform tool differences, sandbox/filesystem constraints, and SKILL.md authoring traps, each labeled with how it was verified.
+
 > Skills break in ways that aren't documented anywhere accessible to skill authors. Some breakages are hidden constraints on a single tool. Some are differences between platforms. Some are silent fallbacks the author never notices. This repo catalogs them — with reproductions — so you find the answer when you search for the error, not when you read 4,000 lines of system prompt.
 
 ## What this is / what this isn't
@@ -85,6 +87,36 @@ Each pitfall is labeled with one of three tiers. The repo's credibility comes fr
 - **`verified`** — reproduced empirically (Linh or a Claude Code session); a reproduction is included
 - **`schema-only`** — verified by reading the tool's JSON schema or description; not triggered empirically
 - **`stub`** — symptom and cause are documented but no reproduction yet; contributions welcome
+
+## FAQ
+
+### Why does my Claude skill work on Claude.ai but break or produce gibberish on Claude Code or Claude Desktop?
+
+Usually because the skill names a tool that doesn't exist on the other platform. Instead of erroring, the model silently substitutes an approximation, so the output looks plausible but is wrong. See [Skills fail silently when their named tool doesn't exist](pitfalls/cross-platform/silent-fallback-when-tool-missing.md) and write [tool-agnostic instructions](pitfalls/skill-structure/tool-names-as-instructions-non-portable.md).
+
+### Why does `Edit` or `Write` say the file "has not been read yet"?
+
+On Claude Code and Desktop, `Edit` and `Write` require a `Read` of the file earlier in the same conversation (creating the file via `Write` also counts). See [Edit requires a prior Read](pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md) and [Write requires a prior Read for existing files](pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md).
+
+### Why doesn't my skill's `references/foo.md` file load?
+
+Relative paths resolve against the working directory, not the skill's own directory, so `Read("references/foo.md")` usually 404s. The "Base directory for this skill" header is just a hint, not a working-directory change. See [references/ path resolution](pitfalls/skill-structure/references-directory-path-resolution.md).
+
+### Does Claude Code pick up a new skill or edited SKILL.md without restarting?
+
+A brand-new skill directory [hot-loads on the next turn](pitfalls/skill-structure/code-skill-directory-hot-load-works.md). But [edits to an already-loaded SKILL.md do *not*](pitfalls/skill-structure/skill-md-edit-no-hot-reload.md) — the body is cached at first load, so restart to see changes.
+
+### Why did `Write` overwrite my file with no warning?
+
+`Write` (Code/Desktop) overwrites silently, whereas Claude.ai's `create_file` refuses to overwrite. This is the most dangerous cross-platform divergence — see [Write vs create_file overwrite semantics](pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md).
+
+### Can I rely on `cd` or environment variables carrying between bash calls?
+
+No — on Claude Code and Desktop each bash call resets the working directory and shell state. Chain commands in a single call or use absolute paths. See [Code bash has no cwd or state carryover](pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.md).
+
+### `AskUserQuestion` or `ask_user_input_v0` — which one, and what are the limits?
+
+They're different tools with different schemas and caps (Claude.ai's `ask_user_input_v0` allows 3 questions × 4 options; `AskUserQuestion` on Code/Desktop allows 4 × 4). See [AskUserQuestion vs ask_user_input_v0](pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md).
 
 ## Relationship to skill-creator
 
