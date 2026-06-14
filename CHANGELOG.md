@@ -2,6 +2,23 @@
 
 All notable changes to this catalog are recorded here. Dates are ISO 8601.
 
+## [Unreleased]
+
+### Added
+
+- **tool-behaviors/code-bash-no-cwd-or-state-carryover** — new `verified` entry: Claude Code's `Bash` resets cwd to the project directory after every call and does not carry over exported variables (reproduced on Opus 4.8, 2026-06-14). Added to the README symptom list and the tool-inventory matrix.
+
+### Changed
+
+- **tool-behaviors/desktop-bash-no-state-carryover** — corrected a false cross-platform claim: Code's `Bash` does **not** persist cwd across calls (the entry previously asserted it did). Non-carryover affects both Code and Desktop; only Claude.ai persists cwd.
+- **matrix/tool-inventory.md** — updated the shell-command row (Code now flagged "no state carryover"; timeout noted as documented-not-hard-enforced) and bumped "Last updated" to 2026-06-14.
+
+- Promoted four Claude Code entries from `schema-only` to `verified` by reproducing them live in a Claude Code session (Opus 4.8, 2026-06-14):
+  - **tool-behaviors/edit-requires-prior-read-same-conversation** — added verbatim reproduction; corrected the error string to `File has not been read yet. Read it first before writing to it.`
+  - **tool-behaviors/write-requires-prior-read-for-existing-files** — added reproduction confirming the gate fires only for existing files.
+  - **tool-constraints/code-bash-600-second-ceiling** — **corrected**: an over-limit `timeout` (700000ms) is **not** rejected as previously inferred; it is silently accepted/clamped. Severity changed from Hard error to Silent clamp.
+  - **tool-behaviors/code-bash-embedded-git-policy** — updated to the current (Opus 4.8) policy text; the `Co-Authored-By` trailer is now `Claude Opus 4.8 (1M context)` (was `4.7`) and the prohibition list has drifted. Added a warning not to hardcode version-specific git policy details.
+
 ## [0.1.0] — 2026-05-17
 
 Initial release. 34 pitfalls across five categories, each labeled with a verification tier (`verified` / `schema-only` / `stub`) and platform applicability for Claude.ai, Claude Code, and Claude Desktop.
