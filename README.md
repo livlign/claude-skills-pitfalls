@@ -44,6 +44,7 @@ If you arrived here from a Google search, the entry that matches your symptom is
 - "Bash `timeout` rejected / capped on Claude Code" → [Claude Code Bash 600s timeout ceiling](pitfalls/tool-constraints/code-bash-600-second-ceiling.md)
 - "Bash `timeout_ms` capped on Claude Desktop" → [Claude Desktop bash 45s ceiling](pitfalls/tool-constraints/desktop-bash-45-second-ceiling.md)
 - "Shell variable lost between bash calls on Claude Desktop" → [Desktop bash no state carryover](pitfalls/tool-behaviors/desktop-bash-no-state-carryover.md)
+- "`cd` / exported variable doesn't carry to the next bash call on Claude Code" → [Code bash no cwd or state carryover](pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.md)
 - "Claude Code refused my `git commit --amend` / `--no-verify`" → [Code Bash embedded git policy](pitfalls/tool-behaviors/code-bash-embedded-git-policy.md)
 - "MCP tool name format mismatch across platforms" → [MCP tool name format diverges](pitfalls/cross-platform/mcp-tool-name-format-diverges.md)
 - "`AskUserQuestion` vs `ask_user_input_v0` — which one?" → [AskUserQuestion vs ask_user_input_v0](pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md)

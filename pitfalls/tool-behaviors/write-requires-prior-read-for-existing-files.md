@@ -4,7 +4,8 @@
 
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅
-- **Verification tier:** schema-only
+- **Verified on:** Claude Code (Opus 4.8), 2026-06-14
+- **Verification tier:** verified
 - **Severity:** Hard error
 
 ## Symptom
@@ -14,6 +15,19 @@ A SKILL.md that says "create or replace this file" without reading first errors 
 ## Cause
 
 `Write`'s description on both Code and Desktop requires a prior `Read` of the target file before overwriting it.
+
+## Reproduction
+
+An existing file is created out-of-band (so it was never read via the `Read` tool this conversation), then `Write` targets it:
+
+```
+$ printf 'original contents\n' > /tmp/repro-existing-file.txt
+
+Write(file_path="/tmp/repro-existing-file.txt", content="overwritten contents\n")
+→ File has not been read yet. Read it first before writing to it.
+```
+
+Same gate and same verbatim error as `Edit`. A brand-new path (no existing file) writes without complaint; the check fires only when the target already exists.
 
 ## Fix
 

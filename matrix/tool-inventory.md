@@ -1,6 +1,6 @@
 # Tool inventory across Claude platforms
 
-Last updated: 2026-05-17
+Last updated: 2026-06-14
 Verified platforms: Claude.ai (web), Claude Code (CLI, darwin), Claude Desktop
 
 For each capability, this matrix shows the tool name on each platform and notes key constraints. "—" means absent. "(deferred)" means the tool exists but requires `ToolSearch` before calling on Code/Desktop. Rows are *capabilities*, not tool names, so divergence is visible rather than hidden under names.
@@ -8,7 +8,7 @@ For each capability, this matrix shows the tool name on each platform and notes 
 | Capability | Claude.ai | Claude Code | Claude Desktop | Notes / pitfall links |
 |---|---|---|---|---|
 | Ask user a structured question | `ask_user_input_v0` (max 3 q × 4 opt) | `AskUserQuestion` (max 4 q × 4 opt) | `AskUserQuestion` (max 4 q × 4 opt) | [schemas differ](../pitfalls/cross-platform/askuserquestion-vs-ask-user-input-v0.md); [Claude.ai caps](../pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md) |
-| Run shell command | `bash_tool` (sandboxed, allowlisted net) | `Bash` (host, 600s cap, git policy) | `mcp__workspace__bash` (sandboxed, 45s cap, no state carryover) | [three shapes](../pitfalls/cross-platform/bash-tool-three-shapes.md) |
+| Run shell command | `bash_tool` (sandboxed, allowlisted net) | `Bash` (host, git policy, no state carryover, ~10min documented timeout) | `mcp__workspace__bash` (sandboxed, 45s cap, no state carryover) | [three shapes](../pitfalls/cross-platform/bash-tool-three-shapes.md); [Code no carryover](../pitfalls/tool-behaviors/code-bash-no-cwd-or-state-carryover.md) |
 | Read a file | `view` (absolute path required; lists dirs) | `Read` (resolves to cwd, not skill dir) | `Read` | [view abs-path](../pitfalls/tool-behaviors/claude-ai-view-requires-absolute-paths.md); [Read cwd](../pitfalls/tool-behaviors/code-read-resolves-against-cwd-not-skill-dir.md) |
 | Edit a file | `str_replace` (no `replace_all`) | `Edit` (requires prior Read; `replace_all` supported) | `Edit` (requires prior Read; `replace_all` supported) | [replace_all divergence](../pitfalls/cross-platform/edit-replace-all-divergence.md); [prior-read](../pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md) |
 | Create a file | `create_file` (refuses overwrite) | `Write` (silent overwrite; prior Read for existing) | `Write` (silent overwrite; prior Read for existing) | [overwrite semantics](../pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md) |

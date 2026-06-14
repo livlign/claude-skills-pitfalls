@@ -3,7 +3,7 @@
 > On Claude Desktop, each bash call runs in a fresh shell — exported variables, `cd`, and background jobs from a previous call do not carry over to the next.
 
 - **Category:** tool-behaviors
-- **Applies to:** Claude.ai ❌ (cwd persists) | Claude Code ❌ (cwd persists) | Claude Desktop ✅
+- **Applies to:** Claude.ai ❌ (cwd persists) | Claude Code ✅ (resets — see note) | Claude Desktop ✅
 - **Verification tier:** schema-only
 - **Severity:** Behavioral divergence
 
@@ -21,4 +21,4 @@ Combine related shell operations into a single bash call, or pass absolute paths
 
 ## Notes
 
-Both Claude.ai's `bash_tool` and Code's `Bash` persist cwd across calls. Skills written and tested on those platforms will silently misbehave on Desktop.
+Claude.ai's `bash_tool` persists cwd across calls. Code's `Bash` does **not** (verified on Opus 4.8, 2026-06-14 — it resets to the project directory after each call); see [`code-bash-no-cwd-or-state-carryover.md`](./code-bash-no-cwd-or-state-carryover.md). So this non-carryover behavior affects both Desktop and Code — only Claude.ai persists cwd. Skills written and tested on Claude.ai will silently misbehave on the other two.
