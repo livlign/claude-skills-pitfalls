@@ -7,6 +7,7 @@ All notable changes to this catalog are recorded here. Dates are ISO 8601.
 ### Added
 
 - **tool-behaviors/code-bash-no-cwd-or-state-carryover** — new `verified` entry: Claude Code's `Bash` resets cwd to the project directory after every call and does not carry over exported variables (reproduced on Opus 4.8, 2026-06-14). Added to the README symptom list and the tool-inventory matrix.
+- **README "Find by symptom"** — expanded from 16 to all 35 entries, so every catalogued pitfall is reachable from the README by the error/symptom a stuck author would search. Improves in-repo discoverability.
 
 ### Changed
 
