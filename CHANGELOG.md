@@ -10,6 +10,7 @@ All notable changes to this catalog are recorded here. Dates are ISO 8601.
 - **README "Find by symptom"** — expanded from 16 to all 35 entries, so every catalogued pitfall is reachable from the README by the error/symptom a stuck author would search. Improves in-repo discoverability.
 - **cross-platform/view-vs-read-directory-listing** — added the verbatim Code error (`EISDIR: illegal operation on a directory`) as a reproduction, so the page surfaces when that error is searched (re-confirmed on Opus 4.8, 2026-06-14).
 - **tool-behaviors/edit-old-string-must-not-include-read-line-number-prefix** — new `verified` entry: `Edit` fails with "String to replace not found in file" when `old_string` carries the `<line>\t` prefix from `Read`'s `cat -n` output (reproduced on Opus 4.8, 2026-06-14). Added to the README symptom list and the tool-behaviors index (which also gained the previously-missing `code-bash-no-cwd-or-state-carryover` link).
+- **README discoverability pass** — added a keyword-rich tagline under the title and a question-shaped **FAQ** section (matching how people search and how AI assistants surface answers) linking to the most-searched entries. Set the repository homepage URL to the live site so the GitHub "About" sidebar links to the checker.
 
 ### Changed
 
