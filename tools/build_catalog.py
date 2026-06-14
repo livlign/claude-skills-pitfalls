@@ -316,6 +316,90 @@ def page_html(e, cat_entries, prev_e, next_e):
 """
 
 
+# Client-side semantic search. Substring search works immediately; once the
+# embedding model finishes loading (lazily, on first focus of the box) queries
+# are ranked by cosine similarity of all-MiniLM-L6-v2 embeddings. If the model
+# can't load (offline / CDN blocked), it falls back to substring search.
+SEARCH_JS = r"""
+(function(){
+  var q=document.getElementById('q');
+  var statusEl=document.getElementById('searchstatus');
+  var results=document.getElementById('results');
+  var nr=document.getElementById('noresults');
+  var chips=document.querySelector('.chips');
+  var cats=[].slice.call(document.querySelectorAll('.cat'));
+  var data=JSON.parse(document.getElementById('searchdata').textContent);
+  data.forEach(function(d){ d.lc=d.tx.toLowerCase(); });
+
+  function browse(){
+    cats.forEach(function(c){ c.style.display=''; });
+    chips.style.display=''; results.style.display='none'; results.innerHTML=''; nr.style.display='none';
+  }
+  function show(hits, semantic){
+    cats.forEach(function(c){ c.style.display='none'; });
+    chips.style.display='none';
+    if(!hits.length){ results.style.display='none'; nr.style.display=''; return; }
+    nr.style.display='none'; results.style.display='';
+    results.innerHTML=hits.map(function(h){
+      var sc = semantic ? '<span class="score">'+Math.round(h.score*100)+'%</span>' : '';
+      return '<div class="entry"><div class="row"><a href="'+h.d.href+'">'+h.d.ht+'</a>'+sc+'</div><span class="sum">'+h.d.hs+'</span></div>';
+    }).join('');
+  }
+  function lexical(v){
+    return data.map(function(d){ return {d:d, score:(d.lc.indexOf(v)>-1?1:0)}; })
+               .filter(function(x){ return x.score>0; });
+  }
+
+  var extractor=null, docVecs=null, state='idle'; // idle | loading | ready | failed
+  function cos(a,b){ var s=0; for(var i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
+
+  async function ensureModel(){
+    if(state!=='idle') return;
+    state='loading';
+    statusEl.textContent='Loading semantic model… (~20 MB, first visit only)';
+    try{
+      var T=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+      T.env.allowLocalModels=false;
+      extractor=await T.pipeline('feature-extraction','Xenova/all-MiniLM-L6-v2',{quantized:true});
+      statusEl.textContent='Indexing '+data.length+' entries…';
+      docVecs=[];
+      for(var i=0;i<data.length;i++){
+        var o=await extractor(data[i].tx,{pooling:'mean',normalize:true});
+        docVecs.push(o.data);
+      }
+      state='ready';
+      statusEl.textContent='Semantic search ready — results ranked by meaning.';
+      setTimeout(function(){ if(state==='ready') statusEl.textContent=''; }, 2500);
+      if(q.value.trim()) run();
+    }catch(err){
+      state='failed';
+      statusEl.textContent='Semantic model unavailable — using keyword search.';
+    }
+  }
+
+  async function semantic(v){
+    var o=await extractor(v,{pooling:'mean',normalize:true});
+    var qv=o.data;
+    var scored=data.map(function(d,i){ return {d:d, score:cos(qv,docVecs[i])}; });
+    scored.sort(function(a,b){ return b.score-a.score; });
+    return scored.filter(function(x){ return x.score>0.22; }).slice(0,15);
+  }
+
+  var timer=null;
+  async function run(){
+    var v=q.value.trim();
+    if(!v){ browse(); return; }
+    if(state==='ready'){
+      try{ show(await semantic(v), true); return; }catch(e){}
+    }
+    show(lexical(v.toLowerCase()), false);
+  }
+  q.addEventListener('focus', ensureModel);
+  q.addEventListener('input', function(){ clearTimeout(timer); timer=setTimeout(run, 150); });
+})();
+"""
+
+
 def index_html(entries):
     by_cat = {c: [] for c in CATEGORIES}
     for e in entries:
@@ -328,23 +412,31 @@ def index_html(entries):
         for c in CATEGORIES if by_cat.get(c)
     )
 
+    search_records = []
     blocks = []
     for cat, desc in CATEGORIES.items():
         rows = []
         for e in by_cat.get(cat, []):
-            plain = html.escape(
-                (strip_md_inline(e["title"]) + " " + strip_md_inline(e["summary"]) + " " + cat).lower()
-            )
             rows.append(
-                f'<div class="entry" data-text="{plain}">'
+                f'<div class="entry">'
                 f'<div class="row"><a href="{cat}/{e["slug"]}.html">{inline(e["title"], "pitfalls/index.md")}</a>'
                 f'{tier_badge(e["tier"])}</div>'
                 f'<span class="sum">{inline(e["summary"], "pitfalls/index.md")}</span></div>'
             )
+            search_records.append({
+                "href": f'{cat}/{e["slug"]}.html',
+                "ht": inline(e["title"], "pitfalls/index.md"),
+                "hs": inline(e["summary"], "pitfalls/index.md"),
+                # plain text fed to the embedding model
+                "tx": f'{strip_md_inline(e["title"])}. {strip_md_inline(e["summary"])} ({cat})',
+            })
         blocks.append(
             f'<section class="cat" id="cat-{cat}"><h2>{html.escape(cat)}</h2>'
             f'<p class="desc">{html.escape(desc)}</p>{"".join(rows)}</section>'
         )
+
+    import json
+    data_json = json.dumps(search_records, ensure_ascii=False).replace("</", "<\\/")
     total = len(entries)
     return f"""<!doctype html>
 <html lang="en">
@@ -368,8 +460,10 @@ def index_html(entries):
 <div class="wrap">
   <h1>Why Claude skills break across platforms</h1>
   <p class="lede">A catalog of {total} documented runtime pitfalls when writing Claude skills (<code>SKILL.md</code>) — hidden tool limits, cross-platform differences, sandbox constraints, and authoring traps. Each entry has a cause, a fix, and a verification label.</p>
-  <input class="search" id="q" type="search" placeholder="Search pitfalls — error text, tool name, symptom…" autocomplete="off" aria-label="Search pitfalls">
+  <input class="search" id="q" type="search" placeholder="Search by meaning — e.g. “file overwritten without warning”, “permission denied writing”…" autocomplete="off" aria-label="Search pitfalls">
+  <span class="searchstatus" id="searchstatus"></span>
   <div class="chips">{chips}</div>
+  <div id="results"></div>
   {"".join(blocks)}
   <p class="noresults" id="noresults">No pitfalls match your search.</p>
   <footer class="pagefoot">
@@ -377,27 +471,8 @@ def index_html(entries):
     <span><a href="https://github.com/livlign/claude-skills-pitfalls">Source on GitHub</a></span>
   </footer>
 </div>
-<script>
-(function(){{
-  var q=document.getElementById('q');
-  var entries=[].slice.call(document.querySelectorAll('.entry'));
-  var cats=[].slice.call(document.querySelectorAll('.cat'));
-  var nr=document.getElementById('noresults');
-  function f(){{
-    var v=q.value.trim().toLowerCase(), any=false;
-    entries.forEach(function(el){{
-      var show=!v||el.getAttribute('data-text').indexOf(v)>-1;
-      el.style.display=show?'':'none'; if(show)any=true;
-    }});
-    cats.forEach(function(c){{
-      var vis=[].slice.call(c.querySelectorAll('.entry')).some(function(e){{return e.style.display!=='none';}});
-      c.style.display=vis?'':'none';
-    }});
-    nr.style.display=any?'none':'';
-  }}
-  q.addEventListener('input',f);
-}})();
-</script>
+<script type="application/json" id="searchdata">{data_json}</script>
+<script>{SEARCH_JS}</script>
 </body>
 </html>
 """

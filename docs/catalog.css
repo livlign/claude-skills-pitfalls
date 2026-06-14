@@ -202,6 +202,9 @@ pre code { background: none; padding: 0; color: inherit; }
 }
 .chips a:hover { border-color: var(--ink); color: var(--ink); }
 .noresults { color: var(--ink-3); padding: 24px 0; display: none; }
+.searchstatus { display: block; font-size: 12px; font-family: "IBM Plex Mono", monospace; color: var(--ink-4); margin: -8px 0 10px; min-height: 16px; }
+#results { display: none; }
+#results .score { float: right; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-4); }
 
 /* ── entry layout with sidebar ── */
 .layout { display: grid; grid-template-columns: 1fr 240px; gap: 40px; align-items: start; }
