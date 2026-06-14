@@ -38,6 +38,7 @@ If you arrived here from a Google search, the entry that matches your symptom is
 - "`Edit` failed with 'you must use Read first'" → [Edit requires a prior Read in the same conversation](pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md)
 - "`ask_user_input_v0` schema validation error / too many questions / too many options" → [ask_user_input_v0 3-question, 4-option ceiling](pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md)
 - "`references/foo.md` not found / doesn't load from my skill dir" → [references/ path resolution](pitfalls/skill-structure/references-directory-path-resolution.md)
+- "I edited my SKILL.md but Claude Code still uses the old instructions" → [Edits to a loaded SKILL.md don't hot-reload mid-session](pitfalls/skill-structure/skill-md-edit-no-hot-reload.md)
 - "`pip install` fails on Claude.ai with externally-managed-environment" → [Claude.ai pip install break-system-packages](pitfalls/environment/claude-ai-pip-install-break-system-packages.md)
 - "Files my skill wrote disappeared between turns on Claude.ai" → [Claude.ai sandbox filesystem resets between turns](pitfalls/environment/claude-ai-filesystem-resets-between-turns.md)
 - "`curl` / network request blocked on Claude.ai" → [Claude.ai HTTPS egress allowlist](pitfalls/environment/claude-ai-network-egress-allowlist.md)

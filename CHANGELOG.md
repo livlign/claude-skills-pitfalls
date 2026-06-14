@@ -10,6 +10,8 @@ All notable changes to this catalog are recorded here. Dates are ISO 8601.
 
 ### Changed
 
+- **skill-structure/skill-md-edit-no-hot-reload** (renamed from `skill-md-edit-hot-reload-unverified`) — resolved the `stub` to `verified`: edits to an already-loaded SKILL.md are **not** hot-reloaded mid-session (the body is cached at first load; restart required). Reproduced live with a throwaway skill on Opus 4.8, 2026-06-14. Updated referrers in the category README and the hot-load entry; added a README symptom line.
+- **skill-structure/code-skill-directory-hot-load-works**, **skill-structure/code-skill-base-directory-header-is-informational**, **tool-behaviors/code-read-resolves-against-cwd-not-skill-dir** — re-confirmed accurate on Opus 4.8, 2026-06-14 (drift sweep); refreshed "Verified on" dates. The `Read`-cwd entry also notes relative paths still resolve against cwd despite the tool description now saying paths must be absolute.
 - **tool-behaviors/desktop-bash-no-state-carryover** — corrected a false cross-platform claim: Code's `Bash` does **not** persist cwd across calls (the entry previously asserted it did). Non-carryover affects both Code and Desktop; only Claude.ai persists cwd.
 - **matrix/tool-inventory.md** — updated the shell-command row (Code now flagged "no state carryover"; timeout noted as documented-not-hard-enforced) and bumped "Last updated" to 2026-06-14.
 

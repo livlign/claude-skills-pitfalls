@@ -4,7 +4,7 @@
 
 - **Category:** skill-structure
 - **Applies to:** Claude Code ✅
-- **Verified on:** Claude Code, 2026-05-17
+- **Verified on:** Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14
 - **Verification tier:** verified
 - **Severity:** Informational — not a pitfall, a positive finding worth documenting
 
@@ -20,4 +20,4 @@ Subsequent testing (2026-05-17) confirmed Claude Code's harness does hot-load ne
 
 Included to correct earlier hearsay. If a new skill doesn't appear in the inventory, suspect the auto-mode classifier blocked the write of `SKILL.md`, not the loader.
 
-Whether *edits to an already-loaded SKILL.md* hot-reload is a separate question not yet verified. See [`skill-md-edit-hot-reload-unverified.md`](./skill-md-edit-hot-reload-unverified.md).
+Note the contrast with *edits to an already-loaded SKILL.md*, which are **not** hot-reloaded mid-session — that body is cached at first load. See [`skill-md-edit-no-hot-reload.md`](./skill-md-edit-no-hot-reload.md).

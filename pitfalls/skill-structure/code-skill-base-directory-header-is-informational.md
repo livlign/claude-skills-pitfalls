@@ -4,7 +4,7 @@
 
 - **Category:** skill-structure
 - **Applies to:** Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❓
-- **Verified on:** Claude Code, 2026-05-17
+- **Verified on:** Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14
 - **Verification tier:** verified
 - **Severity:** Misleading affordance
 
