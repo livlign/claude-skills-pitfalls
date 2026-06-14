@@ -338,8 +338,8 @@ SEARCH_JS = r"""
   function show(hits, semantic){
     cats.forEach(function(c){ c.style.display='none'; });
     chips.style.display='none';
-    if(!hits.length){ results.style.display='none'; nr.style.display=''; return; }
-    nr.style.display='none'; results.style.display='';
+    if(!hits.length){ results.style.display='none'; nr.style.display='block'; return; }
+    nr.style.display='none'; results.style.display='block';
     results.innerHTML=hits.map(function(h){
       var sc = semantic ? '<span class="score">'+Math.round(h.score*100)+'%</span>' : '';
       return '<div class="entry"><div class="row"><a href="'+h.d.href+'">'+h.d.ht+'</a>'+sc+'</div><span class="sum">'+h.d.hs+'</span></div>';
