@@ -36,6 +36,7 @@ If you arrived here from a Google search, the entry that matches your symptom is
 - "My skill works on Claude.ai but produces gibberish on Claude Code / Desktop" → [Skills fail silently when their named tool doesn't exist](pitfalls/cross-platform/silent-fallback-when-tool-missing.md)
 - "`Write` overwrote my file with no warning" → [Write vs create_file overwrite semantics](pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md)
 - "`Edit` failed with 'you must use Read first'" → [Edit requires a prior Read in the same conversation](pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md)
+- "`Edit` failed with 'String to replace not found' but the text is right there" → [old_string must not include Read's line-number prefix](pitfalls/tool-behaviors/edit-old-string-must-not-include-read-line-number-prefix.md)
 - "`ask_user_input_v0` schema validation error / too many questions / too many options" → [ask_user_input_v0 3-question, 4-option ceiling](pitfalls/tool-constraints/ask-user-input-v0-question-and-option-limits.md)
 - "`references/foo.md` not found / doesn't load from my skill dir" → [references/ path resolution](pitfalls/skill-structure/references-directory-path-resolution.md)
 - "I edited my SKILL.md but Claude Code still uses the old instructions" → [Edits to a loaded SKILL.md don't hot-reload mid-session](pitfalls/skill-structure/skill-md-edit-no-hot-reload.md)
