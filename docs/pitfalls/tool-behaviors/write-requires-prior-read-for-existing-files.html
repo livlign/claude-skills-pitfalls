@@ -18,15 +18,14 @@
 <link rel="stylesheet" href="../../catalog.css">
 </head>
 <body>
+<nav class="topnav"><a class="brand" href="../index.html">claude-skills-pitfalls</a><span class="navlinks"><a href="../index.html">Catalog</a><a href="../../index.html">Checker</a><a href="https://github.com/livlign/claude-skills-pitfalls">GitHub</a></span></nav>
 <div class="wrap">
-  <header class="masthead">
-    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
-    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / write-requires-prior-read-for-existing-files</span>
-  </header>
-  <main>
-    <h1><code>Write</code> requires a prior <code>Read</code> for existing files</h1>
-    <span class="tier tier-verified">verified</span>
-    <blockquote><p>Claude Code&#x27;s <code>Write</code> refuses to overwrite an existing file unless <code>Read</code> was called on that path earlier in the conversation — even when the overwrite is intentional.</p></blockquote>
+  <div class="layout">
+    <main>
+      <p class="crumb"><a href="../index.html">catalog</a> / tool-behaviors</p>
+      <h1><code>Write</code> requires a prior <code>Read</code> for existing files</h1>
+      <span class="tier tier-verified">verified</span>
+      <blockquote><p>Claude Code&#x27;s <code>Write</code> refuses to overwrite an existing file unless <code>Read</code> was called on that path earlier in the conversation — even when the overwrite is intentional.</p></blockquote>
 <ul>
 <li><strong>Category:</strong> tool-behaviors</li>
 <li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅</li>
@@ -49,11 +48,19 @@ Write(file_path=&quot;/tmp/repro-existing-file.txt&quot;, content=&quot;overwrit
 <p>For portable skills, instruct Claude to read the existing file before writing. The extra <code>Read</code> is harmless on Claude.ai (where <code>create_file</code> refuses overwrite regardless).</p>
 <h2>Notes</h2>
 <p>Related: <a href="../cross-platform/write-vs-create-file-overwrite-semantics.html"><code>../cross-platform/write-vs-create-file-overwrite-semantics.md</code></a> and the parallel <code>Edit</code> rule in <a href="./edit-requires-prior-read-same-conversation.html"><code>edit-requires-prior-read-same-conversation.md</code></a>.</p>
-  </main>
-  <footer class="pagefoot">
-    <span><a href="../index.html">← All pitfalls</a></span>
-    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md">Edit this page on GitHub</a></span>
-  </footer>
+      <nav class="prevnext"><a class="pv" href="../tool-behaviors/edit-requires-prior-read-same-conversation.html"><span class="lbl">Previous</span>Edit requires a prior Read in the same conversation</a><a class="nx" href="../tool-behaviors/code-bash-no-cwd-or-state-carryover.html"><span class="lbl">Next</span>Claude Code&#x27;s Bash does not persist cwd or shell state between calls</a></nav>
+      <footer class="pagefoot">
+        <span><a href="../index.html">← All pitfalls</a></span>
+        <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md">Edit this page on GitHub</a></span>
+      </footer>
+    </main>
+    <aside class="sidebar">
+      <p class="side-title">tool-behaviors</p>
+      <ul><li class=""><a href="conversation-search-keyword-only-matching.html">conversation_search is keyword-only; meta-words poison results</a></li><li class=""><a href="edit-old-string-must-not-include-read-line-number-prefix.html">Edit fails with &quot;String to replace not found&quot; when old_string includes Read&#x27;s line-number prefix</a></li><li class=""><a href="edit-requires-prior-read-same-conversation.html">Edit requires a prior Read in the same conversation</a></li><li class="current"><a href="write-requires-prior-read-for-existing-files.html">Write requires a prior Read for existing files</a></li><li class=""><a href="code-bash-no-cwd-or-state-carryover.html">Claude Code&#x27;s Bash does not persist cwd or shell state between calls</a></li><li class=""><a href="code-bash-embedded-git-policy.html">Claude Code&#x27;s Bash embeds a strict git policy in its tool description</a></li><li class=""><a href="code-read-resolves-against-cwd-not-skill-dir.html">Claude Code&#x27;s Read resolves relative paths against cwd, not the skill directory</a></li><li class=""><a href="desktop-bash-no-state-carryover.html">Claude Desktop&#x27;s bash has no state carryover between calls</a></li><li class=""><a href="claude-ai-view-requires-absolute-paths.html">Claude.ai&#x27;s view rejects relative paths and bare filenames</a></li></ul>
+      <p class="side-title">Categories</p>
+      <ul><li><a href="../index.html#cat-tool-constraints">tool-constraints</a></li><li><a href="../index.html#cat-tool-behaviors">tool-behaviors</a></li><li><a href="../index.html#cat-cross-platform">cross-platform</a></li><li><a href="../index.html#cat-environment">environment</a></li><li><a href="../index.html#cat-skill-structure">skill-structure</a></li></ul>
+    </aside>
+  </div>
 </div>
 </body>
 </html>

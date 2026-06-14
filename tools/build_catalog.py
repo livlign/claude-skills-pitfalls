@@ -214,14 +214,63 @@ def strip_md_inline(s):
     return s.strip()
 
 
-def page_html(e):
-    rel_to_docs = "../.."   # docs/pitfalls/<cat>/<slug>.html → docs/
+FONTS = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+    '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">'
+)
+
+
+def topnav(catalog_href, checker_href):
+    return (
+        '<nav class="topnav">'
+        f'<a class="brand" href="{catalog_href}">claude-skills-pitfalls</a>'
+        '<span class="navlinks">'
+        f'<a href="{catalog_href}">Catalog</a>'
+        f'<a href="{checker_href}">Checker</a>'
+        '<a href="https://github.com/livlign/claude-skills-pitfalls">GitHub</a>'
+        '</span></nav>'
+    )
+
+
+def tier_badge(tier):
+    if not tier:
+        return ""
+    cls = "tier-" + tier if tier in ("verified", "schema-only", "stub") else ""
+    return f'<span class="tier {cls}">{tier}</span>'
+
+
+def page_html(e, cat_entries, prev_e, next_e):
     canonical = f"{SITE}/pitfalls/{e['category']}/{e['slug']}.html"
     title_txt = strip_md_inline(e["title"])
     desc_txt = strip_md_inline(e["summary"]) or title_txt
-    cat_label = e["category"]
-    tier_class = "tier-" + e["tier"] if e["tier"] in ("verified", "schema-only", "stub") else ""
-    tier_badge = f'<span class="tier {tier_class}">{e["tier"]}</span>' if e["tier"] else ""
+
+    sib = "".join(
+        f'<li class="{"current" if s["slug"] == e["slug"] else ""}">'
+        f'<a href="{s["slug"]}.html">{html.escape(strip_md_inline(s["title"]))}</a></li>'
+        for s in cat_entries
+    )
+    catnav = "".join(
+        f'<li><a href="../index.html#cat-{c}">{c}</a></li>' for c in CATEGORIES
+    )
+
+    def navlink(p, cls, label):
+        if not p:
+            return "<span></span>"
+        return (
+            f'<a class="{cls}" href="../{p["category"]}/{p["slug"]}.html">'
+            f'<span class="lbl">{label}</span>{html.escape(strip_md_inline(p["title"]))}</a>'
+        )
+
+    prevnext = ""
+    if prev_e or next_e:
+        prevnext = (
+            '<nav class="prevnext">'
+            + navlink(prev_e, "pv", "Previous")
+            + navlink(next_e, "nx", "Next")
+            + "</nav>"
+        )
+
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -236,26 +285,31 @@ def page_html(e):
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{SITE}/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{rel_to_docs}/catalog.css">
+{FONTS}
+<link rel="stylesheet" href="../../catalog.css">
 </head>
 <body>
+{topnav("../index.html", "../../index.html")}
 <div class="wrap">
-  <header class="masthead">
-    <span class="site"><a href="{rel_to_docs}/index.html">claude-skills-pitfalls</a></span>
-    <span class="crumb"><a href="../index.html">catalog</a> / {html.escape(cat_label)} / {html.escape(e['slug'])}</span>
-  </header>
-  <main>
-    <h1>{inline(e['title'], e['path'])}</h1>
-    {tier_badge}
-    {e['body_html']}
-  </main>
-  <footer class="pagefoot">
-    <span><a href="../index.html">← All pitfalls</a></span>
-    <span><a href="{GITHUB_BLOB}/{e['path']}">Edit this page on GitHub</a></span>
-  </footer>
+  <div class="layout">
+    <main>
+      <p class="crumb"><a href="../index.html">catalog</a> / {html.escape(e['category'])}</p>
+      <h1>{inline(e['title'], e['path'])}</h1>
+      {tier_badge(e['tier'])}
+      {e['body_html']}
+      {prevnext}
+      <footer class="pagefoot">
+        <span><a href="../index.html">← All pitfalls</a></span>
+        <span><a href="{GITHUB_BLOB}/{e['path']}">Edit this page on GitHub</a></span>
+      </footer>
+    </main>
+    <aside class="sidebar">
+      <p class="side-title">{html.escape(e['category'])}</p>
+      <ul>{sib}</ul>
+      <p class="side-title">Categories</p>
+      <ul>{catnav}</ul>
+    </aside>
+  </div>
 </div>
 </body>
 </html>
@@ -266,17 +320,29 @@ def index_html(entries):
     by_cat = {c: [] for c in CATEGORIES}
     for e in entries:
         by_cat.setdefault(e["category"], []).append(e)
+    for c in by_cat:
+        by_cat[c].sort(key=lambda x: x["title"].lower())
+
+    chips = "".join(
+        f'<a href="#cat-{c}">{c} ({len(by_cat[c])})</a>'
+        for c in CATEGORIES if by_cat.get(c)
+    )
+
     blocks = []
     for cat, desc in CATEGORIES.items():
-        items = sorted(by_cat.get(cat, []), key=lambda x: x["title"].lower())
         rows = []
-        for e in items:
+        for e in by_cat.get(cat, []):
+            plain = html.escape(
+                (strip_md_inline(e["title"]) + " " + strip_md_inline(e["summary"]) + " " + cat).lower()
+            )
             rows.append(
-                f'<div class="entry"><a href="{cat}/{e["slug"]}.html">{inline(e["title"], "pitfalls/index.md")}</a>'
+                f'<div class="entry" data-text="{plain}">'
+                f'<div class="row"><a href="{cat}/{e["slug"]}.html">{inline(e["title"], "pitfalls/index.md")}</a>'
+                f'{tier_badge(e["tier"])}</div>'
                 f'<span class="sum">{inline(e["summary"], "pitfalls/index.md")}</span></div>'
             )
         blocks.append(
-            f'<section class="cat"><h2>{html.escape(cat)}</h2>'
+            f'<section class="cat" id="cat-{cat}"><h2>{html.escape(cat)}</h2>'
             f'<p class="desc">{html.escape(desc)}</p>{"".join(rows)}</section>'
         )
     total = len(entries)
@@ -294,27 +360,44 @@ def index_html(entries):
 <meta property="og:url" content="{SITE}/pitfalls/index.html">
 <meta property="og:image" content="{SITE}/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{FONTS}
 <link rel="stylesheet" href="../catalog.css">
 </head>
 <body>
+{topnav("index.html", "../index.html")}
 <div class="wrap">
-  <header class="masthead">
-    <span class="site"><a href="../index.html">claude-skills-pitfalls</a></span>
-    <span class="crumb"><a href="../index.html">compatibility checker</a></span>
-  </header>
-  <main>
-    <h1>Why Claude skills break across platforms</h1>
-    <p class="lede">A catalog of {total} documented runtime pitfalls when writing Claude skills (<code>SKILL.md</code>) — hidden tool limits, cross-platform differences, sandbox constraints, and authoring traps. Each entry has a cause, a fix, and a verification label.</p>
-    {"".join(blocks)}
-  </main>
+  <h1>Why Claude skills break across platforms</h1>
+  <p class="lede">A catalog of {total} documented runtime pitfalls when writing Claude skills (<code>SKILL.md</code>) — hidden tool limits, cross-platform differences, sandbox constraints, and authoring traps. Each entry has a cause, a fix, and a verification label.</p>
+  <input class="search" id="q" type="search" placeholder="Search pitfalls — error text, tool name, symptom…" autocomplete="off" aria-label="Search pitfalls">
+  <div class="chips">{chips}</div>
+  {"".join(blocks)}
+  <p class="noresults" id="noresults">No pitfalls match your search.</p>
   <footer class="pagefoot">
     <span><a href="../index.html">← Compatibility checker</a></span>
     <span><a href="https://github.com/livlign/claude-skills-pitfalls">Source on GitHub</a></span>
   </footer>
 </div>
+<script>
+(function(){{
+  var q=document.getElementById('q');
+  var entries=[].slice.call(document.querySelectorAll('.entry'));
+  var cats=[].slice.call(document.querySelectorAll('.cat'));
+  var nr=document.getElementById('noresults');
+  function f(){{
+    var v=q.value.trim().toLowerCase(), any=false;
+    entries.forEach(function(el){{
+      var show=!v||el.getAttribute('data-text').indexOf(v)>-1;
+      el.style.display=show?'':'none'; if(show)any=true;
+    }});
+    cats.forEach(function(c){{
+      var vis=[].slice.call(c.querySelectorAll('.entry')).some(function(e){{return e.style.display!=='none';}});
+      c.style.display=vis?'':'none';
+    }});
+    nr.style.display=any?'none':'';
+  }}
+  q.addEventListener('input',f);
+}})();
+</script>
 </body>
 </html>
 """
@@ -333,11 +416,23 @@ def main():
         MD_SET.add(os.path.relpath(f, ROOT))
     entries = [parse_entry(f) for f in files]
 
+    # group by category (sorted by title) and build a global reading order
+    by_cat = {c: [] for c in CATEGORIES}
     for e in entries:
+        by_cat.setdefault(e["category"], []).append(e)
+    for c in by_cat:
+        by_cat[c].sort(key=lambda x: x["title"].lower())
+    ordered = []
+    for c in CATEGORIES:
+        ordered.extend(by_cat.get(c, []))
+
+    for i, e in enumerate(ordered):
+        prev_e = ordered[i - 1] if i > 0 else None
+        next_e = ordered[i + 1] if i < len(ordered) - 1 else None
         outdir = os.path.join(DOCS, "pitfalls", e["category"])
         os.makedirs(outdir, exist_ok=True)
         with open(os.path.join(outdir, e["slug"] + ".html"), "w", encoding="utf-8") as fh:
-            fh.write(page_html(e))
+            fh.write(page_html(e, by_cat[e["category"]], prev_e, next_e))
 
     with open(os.path.join(DOCS, "pitfalls", "index.html"), "w", encoding="utf-8") as fh:
         fh.write(index_html(entries))

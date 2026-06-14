@@ -18,15 +18,14 @@
 <link rel="stylesheet" href="../../catalog.css">
 </head>
 <body>
+<nav class="topnav"><a class="brand" href="../index.html">claude-skills-pitfalls</a><span class="navlinks"><a href="../index.html">Catalog</a><a href="../../index.html">Checker</a><a href="https://github.com/livlign/claude-skills-pitfalls">GitHub</a></span></nav>
 <div class="wrap">
-  <header class="masthead">
-    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
-    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / mcp-discovery-layer-absent-on-code</span>
-  </header>
-  <main>
-    <h1>MCP discovery (<code>search_mcp_registry</code>, <code>suggest_connectors</code>) is absent on Claude Code</h1>
-    <span class="tier tier-verified">verified</span>
-    <blockquote><p><code>search_mcp_registry</code> and <code>suggest_connectors</code> exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.</p></blockquote>
+  <div class="layout">
+    <main>
+      <p class="crumb"><a href="../index.html">catalog</a> / cross-platform</p>
+      <h1>MCP discovery (<code>search_mcp_registry</code>, <code>suggest_connectors</code>) is absent on Claude Code</h1>
+      <span class="tier tier-verified">verified</span>
+      <blockquote><p><code>search_mcp_registry</code> and <code>suggest_connectors</code> exist on Claude.ai but not on Claude Code; skills that rely on runtime MCP discovery silently misbehave there.</p></blockquote>
 <ul>
 <li><strong>Category:</strong> cross-platform</li>
 <li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ❌ | Claude Desktop ✅ (deferred)</li>
@@ -42,11 +41,19 @@
 <p>For portable skills, don&#x27;t expect the platform to handle connector picking. Use the platform&#x27;s elicitation tool (<code>AskUserQuestion</code> / <code>ask_user_input_v0</code>) to ask the user explicitly inside the skill body.</p>
 <h2>Notes</h2>
 <p>Related: <a href="./dont-assume-instructions-unenforceable-without-picker.html"><code>dont-assume-instructions-unenforceable-without-picker.md</code></a>.</p>
-  </main>
-  <footer class="pagefoot">
-    <span><a href="../index.html">← All pitfalls</a></span>
-    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md">Edit this page on GitHub</a></span>
-  </footer>
+      <nav class="prevnext"><a class="pv" href="../cross-platform/visualization-absent-on-code.html"><span class="lbl">Previous</span>Inline SVG/HTML visualization is absent on Claude Code</a><a class="nx" href="../cross-platform/mcp-tool-name-format-diverges.html"><span class="lbl">Next</span>MCP tool names use different formats on Claude.ai vs Code/Desktop</a></nav>
+      <footer class="pagefoot">
+        <span><a href="../index.html">← All pitfalls</a></span>
+        <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/mcp-discovery-layer-absent-on-code.md">Edit this page on GitHub</a></span>
+      </footer>
+    </main>
+    <aside class="sidebar">
+      <p class="side-title">cross-platform</p>
+      <ul><li class=""><a href="dont-assume-instructions-unenforceable-without-picker.html">&quot;Don&#x27;t assume which tool to use&quot; is unenforceable without an in-skill picker</a></li><li class=""><a href="askuserquestion-vs-ask-user-input-v0.html">AskUserQuestion and ask_user_input_v0 are different tools</a></li><li class=""><a href="edit-replace-all-divergence.html">Edit.replace_all exists on Code/Desktop; Claude.ai&#x27;s str_replace has no equivalent</a></li><li class=""><a href="view-vs-read-directory-listing.html">view lists directories; Read cannot</a></li><li class=""><a href="write-vs-create-file-overwrite-semantics.html">Write overwrites silently; create_file refuses to overwrite</a></li><li class=""><a href="visualization-absent-on-code.html">Inline SVG/HTML visualization is absent on Claude Code</a></li><li class="current"><a href="mcp-discovery-layer-absent-on-code.html">MCP discovery (search_mcp_registry, suggest_connectors) is absent on Claude Code</a></li><li class=""><a href="mcp-tool-name-format-diverges.html">MCP tool names use different formats on Claude.ai vs Code/Desktop</a></li><li class=""><a href="mcp-tools-deferred-on-code-and-desktop.html">MCP tool schemas are deferred on Claude Code and Desktop</a></li><li class=""><a href="past-chat-search-three-shapes.html">Past-chat search has a different shape on each platform</a></li><li class=""><a href="silent-fallback-when-tool-missing.html">Skills fail silently when their named tool doesn&#x27;t exist</a></li><li class=""><a href="bash-tool-three-shapes.html">The bash tool has three structurally different shapes across platforms</a></li></ul>
+      <p class="side-title">Categories</p>
+      <ul><li><a href="../index.html#cat-tool-constraints">tool-constraints</a></li><li><a href="../index.html#cat-tool-behaviors">tool-behaviors</a></li><li><a href="../index.html#cat-cross-platform">cross-platform</a></li><li><a href="../index.html#cat-environment">environment</a></li><li><a href="../index.html#cat-skill-structure">skill-structure</a></li></ul>
+    </aside>
+  </div>
 </div>
 </body>
 </html>
