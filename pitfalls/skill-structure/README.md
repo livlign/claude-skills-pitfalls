@@ -14,7 +14,7 @@ Common questions this page answers:
 - [The "Base directory for this skill" header on Code is informational only](./code-skill-base-directory-header-is-informational.md)
 - [New skill directories hot-load on Claude Code (positive finding)](./code-skill-directory-hot-load-works.md)
 - [`references/foo.md` doesn't resolve from the skill's directory](./references-directory-path-resolution.md)
-- [SKILL.md edit hot-reload behavior is unverified](./skill-md-edit-hot-reload-unverified.md)
+- [Edits to an already-loaded SKILL.md do not hot-reload mid-session](./skill-md-edit-no-hot-reload.md)
 - [Hardcoded tool names in SKILL.md are non-portable](./tool-names-as-instructions-non-portable.md)
 
 See also: [back to all categories](../)

@@ -4,7 +4,7 @@
 
 - **Category:** tool-behaviors
 - **Applies to:** Claude.ai ❌ (different failure mode — see notes) | Claude Code ✅ | Claude Desktop ❓
-- **Verified on:** Claude Code, 2026-05-17
+- **Verified on:** Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14
 - **Verification tier:** verified
 - **Severity:** Silent 404
 
@@ -18,7 +18,7 @@ A SKILL.md at `~/.claude/skills/<name>/` that tells Claude to `Read("references/
 
 ## Reproduction
 
-Reproduced 2026-05-17 on Claude Code: `Read("references/relative.md")` from a skill triggered while cwd was a project dir → `File does not exist. Note: your current working directory is /Users/<user>/Documents/<project>.`
+Reproduced 2026-05-17 on Claude Code; re-confirmed on Opus 4.8, 2026-06-14: `Read("references/relative.md")` while cwd was a project dir → `File does not exist. Note: your current working directory is /Users/<user>/Documents/<project>.` A relative path that *does* exist under cwd (e.g. `Read("README.md")`) resolves and succeeds — confirming resolution is against cwd, not absolute-only, despite the current tool description saying paths "must be absolute."
 
 ## Fix
 
