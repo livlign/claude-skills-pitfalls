@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hardcoded tool names in SKILL.md are non-portable — Claude skills pitfalls</title>
+<meta name="description" content="Hardcoding tool names like &#x27;use the Write tool&#x27; in SKILL.md breaks the skill on platforms where that tool name doesn&#x27;t exist — write tool-agnostic instructions instead.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/tool-names-as-instructions-non-portable.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hardcoded tool names in SKILL.md are non-portable">
+<meta property="og:description" content="Hardcoding tool names like &#x27;use the Write tool&#x27; in SKILL.md breaks the skill on platforms where that tool name doesn&#x27;t exist — write tool-agnostic instructions instead.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/tool-names-as-instructions-non-portable.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / skill-structure / tool-names-as-instructions-non-portable</span>
+  </header>
+  <main>
+    <h1>Hardcoded tool names in SKILL.md are non-portable</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Hardcoding tool names like &#x27;use the Write tool&#x27; in SKILL.md breaks the skill on platforms where that tool name doesn&#x27;t exist — write tool-agnostic instructions instead.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> skill-structure</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Silent fallback / silent substitution</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that says &quot;call the <code>Read</code> tool&quot; or &quot;use <code>AskUserQuestion</code>&quot; works on the platform the author tested and silently degrades elsewhere — falling back to prose on Code, or substituting a similar-named tool with different parameters on Claude.ai.</p>
+<h2>Cause</h2>
+<p>Hardcoding a platform-specific tool name in instruction text invites the silent-fallback behavior documented in <a href="../cross-platform/silent-fallback-when-tool-missing.html"><code>../cross-platform/silent-fallback-when-tool-missing.md</code></a>. The model on the other platform doesn&#x27;t have that tool and either prose-substitutes or picks a near-match analogue.</p>
+<h2>Fix</h2>
+<p>Describe intent, not tool names:</p>
+<ul>
+<li>&quot;Read the file at X&quot; — not &quot;Call the Read tool with X&quot;</li>
+<li>&quot;Ask the user to pick&quot; — not &quot;Call AskUserQuestion with options Y&quot;</li>
+<li>&quot;Search Jira for X&quot; — not &quot;Call mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql&quot;</li>
+</ul>
+<p>The model on each platform picks the available local tool.</p>
+<h2>Notes</h2>
+<p>Related: <a href="../cross-platform/mcp-tool-name-format-diverges.html"><code>../cross-platform/mcp-tool-name-format-diverges.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/skill-structure/tool-names-as-instructions-non-portable.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

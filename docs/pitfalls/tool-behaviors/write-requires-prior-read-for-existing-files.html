@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write requires a prior Read for existing files — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Write refuses to overwrite an existing file unless Read was called on that path earlier in the conversation — even when the overwrite is intentional.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Write requires a prior Read for existing files">
+<meta property="og:description" content="Claude Code&#x27;s Write refuses to overwrite an existing file unless Read was called on that path earlier in the conversation — even when the overwrite is intentional.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / write-requires-prior-read-for-existing-files</span>
+  </header>
+  <main>
+    <h1><code>Write</code> requires a prior <code>Read</code> for existing files</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Write</code> refuses to overwrite an existing file unless <code>Read</code> was called on that path earlier in the conversation — even when the overwrite is intentional.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that says &quot;create or replace this file&quot; without reading first errors on Code/Desktop when the target already exists. New files are fine.</p>
+<h2>Cause</h2>
+<p><code>Write</code>&#x27;s description on both Code and Desktop requires a prior <code>Read</code> of the target file before overwriting it.</p>
+<h2>Reproduction</h2>
+<p>An existing file is created out-of-band (so it was never read via the <code>Read</code> tool this conversation), then <code>Write</code> targets it:</p>
+<pre><code>$ printf &#x27;original contents\n&#x27; &gt; /tmp/repro-existing-file.txt
+
+Write(file_path=&quot;/tmp/repro-existing-file.txt&quot;, content=&quot;overwritten contents\n&quot;)
+→ File has not been read yet. Read it first before writing to it.</code></pre>
+<p>Same gate and same verbatim error as <code>Edit</code>. A brand-new path (no existing file) writes without complaint; the check fires only when the target already exists.</p>
+<h2>Fix</h2>
+<p>For portable skills, instruct Claude to read the existing file before writing. The extra <code>Read</code> is harmless on Claude.ai (where <code>create_file</code> refuses overwrite regardless).</p>
+<h2>Notes</h2>
+<p>Related: <a href="../cross-platform/write-vs-create-file-overwrite-semantics.html"><code>../cross-platform/write-vs-create-file-overwrite-semantics.md</code></a> and the parallel <code>Edit</code> rule in <a href="./edit-requires-prior-read-same-conversation.html"><code>edit-requires-prior-read-same-conversation.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/write-requires-prior-read-for-existing-files.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>view lists directories; Read cannot — Claude skills pitfalls</title>
+<meta name="description" content="On Claude.ai the view tool can list a directory&#x27;s contents; on Claude Code and Desktop the Read tool errors on directory paths.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/view-vs-read-directory-listing.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="view lists directories; Read cannot">
+<meta property="og:description" content="On Claude.ai the view tool can list a directory&#x27;s contents; on Claude Code and Desktop the Read tool errors on directory paths.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/view-vs-read-directory-listing.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / view-vs-read-directory-listing</span>
+  </header>
+  <main>
+    <h1><code>view</code> lists directories; <code>Read</code> cannot</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>On Claude.ai the <code>view</code> tool can list a directory&#x27;s contents; on Claude Code and Desktop the <code>Read</code> tool errors on directory paths.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ (lists dirs) | Claude Code ❌ | Claude Desktop ❌</li>
+<li><strong>Verified on:</strong> Claude.ai 2026-05-17, Claude Code 2026-05-17; Code error re-confirmed on Opus 4.8, 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Functional gap</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that points Claude at a directory expecting a listing succeeds on Claude.ai and errors on Code/Desktop.</p>
+<h2>Cause</h2>
+<p>Claude.ai&#x27;s <code>view</code> lists directories up to two levels deep. Code&#x27;s <code>Read</code> and Desktop&#x27;s <code>Read</code> cannot list directories at all — they error and direct the user to use Bash <code>ls</code>.</p>
+<h2>Reproduction</h2>
+<p>On Claude Code (Opus 4.8, 2026-06-14), calling <code>Read</code> on a directory path:</p>
+<pre><code>Read(file_path=&quot;/tmp/probe&quot;)
+→ EISDIR: illegal operation on a directory, read &#x27;/tmp/probe&#x27;</code></pre>
+<p>If you searched for <code>EISDIR: illegal operation on a directory</code> after a skill pointed <code>Read</code> at a folder, this is the cause: use Bash <code>ls</code>/<code>find</code> instead.</p>
+<h2>Fix</h2>
+<p>For portable skills, use <code>bash_tool</code> / <code>Bash</code> with <code>ls</code> (or <code>find</code>) to list directories. Don&#x27;t rely on view-style directory introspection.</p>
+<h2>Notes</h2>
+<p>Related: <a href="../tool-behaviors/claude-ai-view-requires-absolute-paths.html"><code>../tool-behaviors/claude-ai-view-requires-absolute-paths.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/view-vs-read-directory-listing.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

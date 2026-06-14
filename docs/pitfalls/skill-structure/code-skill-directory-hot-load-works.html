@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>New skill directories hot-load on Claude Code (positive finding) — Claude skills pitfalls</title>
+<meta name="description" content="Positive finding: dropping a new skill directory into the skills folder on Claude Code is picked up on the next turn without restarting the session.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/code-skill-directory-hot-load-works.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="New skill directories hot-load on Claude Code (positive finding)">
+<meta property="og:description" content="Positive finding: dropping a new skill directory into the skills folder on Claude Code is picked up on the next turn without restarting the session.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/skill-structure/code-skill-directory-hot-load-works.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / skill-structure / code-skill-directory-hot-load-works</span>
+  </header>
+  <main>
+    <h1>New skill directories hot-load on Claude Code (positive finding)</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Positive finding: dropping a new skill directory into the skills folder on Claude Code is picked up on the next turn without restarting the session.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> skill-structure</li>
+<li><strong>Applies to:</strong> Claude Code ✅</li>
+<li><strong>Verified on:</strong> Claude Code, 2026-05-17; re-confirmed Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Informational — not a pitfall, a positive finding worth documenting</li>
+</ul>
+<h2>Symptom</h2>
+<p>Earlier testing suggested that skills added mid-session weren&#x27;t picked up. They are.</p>
+<h2>Cause</h2>
+<p>Subsequent testing (2026-05-17) confirmed Claude Code&#x27;s harness does hot-load new <code>~/.claude/skills/&lt;name&gt;/</code> directories on the next turn. No session restart required.</p>
+<h2>Notes</h2>
+<p>Included to correct earlier hearsay. If a new skill doesn&#x27;t appear in the inventory, suspect the auto-mode classifier blocked the write of <code>SKILL.md</code>, not the loader.</p>
+<p>Note the contrast with *edits to an already-loaded SKILL.md*, which are <strong>not</strong> hot-reloaded mid-session — that body is cached at first load. See <a href="./skill-md-edit-no-hot-reload.html"><code>skill-md-edit-no-hot-reload.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/skill-structure/code-skill-directory-hot-load-works.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

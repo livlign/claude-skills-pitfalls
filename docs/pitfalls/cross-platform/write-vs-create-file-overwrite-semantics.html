@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write overwrites silently; create_file refuses to overwrite — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Write overwrites existing files silently; Claude.ai&#x27;s create_file refuses to overwrite and errors. The most dangerous cross-platform divergence in the catalog.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Write overwrites silently; create_file refuses to overwrite">
+<meta property="og:description" content="Claude Code&#x27;s Write overwrites existing files silently; Claude.ai&#x27;s create_file refuses to overwrite and errors. The most dangerous cross-platform divergence in the catalog.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / write-vs-create-file-overwrite-semantics</span>
+  </header>
+  <main>
+    <h1><code>Write</code> overwrites silently; <code>create_file</code> refuses to overwrite</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Write</code> overwrites existing files silently; Claude.ai&#x27;s <code>create_file</code> refuses to overwrite and errors. The most dangerous cross-platform divergence in the catalog.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude.ai web 2026-05-17, Claude Code 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Data loss risk</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill instructed to &quot;create file X with content Y&quot; succeeds on one platform and errors on another, depending on whether X already exists.</p>
+<h2>Cause</h2>
+<p>Code&#x27;s <code>Write</code> and Desktop&#x27;s <code>Write</code> silently overwrite existing files. Claude.ai&#x27;s <code>create_file</code> refuses with <code>File already exists</code>. Same instruction, opposite behavior.</p>
+<h2>Reproduction</h2>
+<p><strong>Claude.ai (2026-05-17):</strong></p>
+<ul>
+<li>First call: <code>create_file(&quot;/tmp/x.txt&quot;, &quot;hello&quot;)</code> → success</li>
+<li>Second call: <code>create_file(&quot;/tmp/x.txt&quot;, &quot;overwritten&quot;)</code> → <code>File already exists: /tmp/x.txt</code></li>
+</ul>
+<p><strong>Claude Code:</strong> <code>Write(&quot;/tmp/x.txt&quot;, &quot;hello&quot;)</code> then <code>Write(&quot;/tmp/x.txt&quot;, &quot;different&quot;)</code> — silently overwrites; original data lost.</p>
+<h2>Fix</h2>
+<p>Don&#x27;t hardcode tool names. Describe intent: &quot;Replace the contents of X with Y. If X exists, make the user aware before overwriting.&quot; The model on each platform uses the available primitives appropriately. For explicit safety, instruct: &quot;If X exists, read it first to confirm, then proceed.&quot;</p>
+<h2>Notes</h2>
+<p>Most dangerous pitfall in this catalog. A Claude.ai author testing locally sees the &quot;won&#x27;t overwrite&quot; guard and assumes universality; the same skill on Code silently destroys user data. The reverse direction (Code → Claude.ai) errors loudly, which is the safer failure mode.</p>
+<p>Related: <a href="../tool-behaviors/write-requires-prior-read-for-existing-files.html"><code>../tool-behaviors/write-requires-prior-read-for-existing-files.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/write-vs-create-file-overwrite-semantics.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

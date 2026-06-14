@@ -35,6 +35,16 @@ The two can differ — a pitfall may apply to a platform you haven't personally 
 - File goes under the correct category folder, named after the specific failure (not the tool).
 - If the pitfall is cross-platform, also add or update the relevant row in [`matrix/tool-inventory.md`](./matrix/tool-inventory.md).
 
+## Regenerating the web catalog
+
+The Markdown entries are the source of truth. The browsable site under `docs/pitfalls/` (plus `docs/sitemap.xml` and `docs/robots.txt`) is generated from them. After adding or editing an entry, run:
+
+```
+python3 tools/build_catalog.py
+```
+
+and commit the regenerated `docs/` files alongside your Markdown change. The generator has no third-party dependencies (Python 3 standard library only).
+
 ## Tone
 
 Concise. No padding. No marketing language. No "in conclusion." Code-style prose.

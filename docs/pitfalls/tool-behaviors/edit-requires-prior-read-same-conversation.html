@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edit requires a prior Read in the same conversation — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Edit errors unless Read was called on the same file earlier in the same conversation — even if your skill just wrote it.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Edit requires a prior Read in the same conversation">
+<meta property="og:description" content="Claude Code&#x27;s Edit errors unless Read was called on the same file earlier in the same conversation — even if your skill just wrote it.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / edit-requires-prior-read-same-conversation</span>
+  </header>
+  <main>
+    <h1><code>Edit</code> requires a prior <code>Read</code> in the same conversation</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Edit</code> errors unless <code>Read</code> was called on the same file earlier in the same conversation — even if your skill just wrote it.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ✅</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A SKILL.md that jumps straight to <code>Edit</code> (e.g., to apply a patch the skill computed in advance) errors on Code and Desktop.</p>
+<h2>Cause</h2>
+<p>Both Code&#x27;s and Desktop&#x27;s <code>Edit</code> tool descriptions state that you must <code>Read</code> the file in the conversation before editing. The check happens at call time and errors out. Claude.ai&#x27;s <code>str_replace</code> has no such requirement.</p>
+<h2>Reproduction</h2>
+<p>In a fresh Claude Code conversation where <code>LICENSE</code> has not yet been read, calling <code>Edit</code> on it:</p>
+<pre><code>Edit(file_path=&quot;…/LICENSE&quot;, old_string=&quot;Creative Commons&quot;, new_string=&quot;Creative Commons!!&quot;)
+→ File has not been read yet. Read it first before writing to it.</code></pre>
+<p>The verbatim error is <code>File has not been read yet. Read it first before writing to it.</code> (not the older &quot;use Read first&quot; phrasing). A <code>Read</code> of the same path earlier in the conversation clears the check.</p>
+<h2>Fix</h2>
+<p>For portable skills, instruct Claude to read the file before editing. The extra <code>Read</code> is harmless on Claude.ai but mandatory on Code/Desktop.</p>
+<h2>Notes</h2>
+<p>Same pattern applies to <code>Write</code> on existing files — see <a href="./write-requires-prior-read-for-existing-files.html"><code>write-requires-prior-read-for-existing-files.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/edit-requires-prior-read-same-conversation.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

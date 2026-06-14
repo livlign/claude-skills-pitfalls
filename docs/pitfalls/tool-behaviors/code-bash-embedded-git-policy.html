@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code&#x27;s Bash embeds a strict git policy in its tool description — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Bash tool description embeds a git safety policy — refusing --amend, --no-verify, reset --hard, force-push, etc. without explicit user permission.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-bash-embedded-git-policy.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code&#x27;s Bash embeds a strict git policy in its tool description">
+<meta property="og:description" content="Claude Code&#x27;s Bash tool description embeds a git safety policy — refusing --amend, --no-verify, reset --hard, force-push, etc. without explicit user permission.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/code-bash-embedded-git-policy.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / code-bash-embedded-git-policy</span>
+  </header>
+  <main>
+    <h1>Claude Code&#x27;s <code>Bash</code> embeds a strict git policy in its tool description</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Bash</code> tool description embeds a git safety policy — refusing <code>--amend</code>, <code>--no-verify</code>, <code>reset --hard</code>, force-push, etc. without explicit user permission.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❌ | Claude Code ✅ | Claude Desktop ❌</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Workflow constraint</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that templates raw git commands on Code (e.g., to amend, force-push, or reset) hits unexpected refusals, or templates a <code>Co-Authored-By</code> trailer that no longer matches the model the harness expects.</p>
+<h2>Cause</h2>
+<p>Claude Code&#x27;s environment embeds a git policy in its instructions. <strong>This policy is version-dependent and drifts between releases — a skill that hardcodes its specifics will rot.</strong> As observed on Opus 4.8 (2026-06-14), the current policy reads:</p>
+<ul>
+<li>Interactive flags (<code>-i</code>, e.g. <code>git rebase -i</code>, <code>git add -i</code>) are not supported.</li>
+<li>Use the <code>gh</code> CLI for GitHub operations (PRs, issues, API).</li>
+<li>Commit or push only when the user asks. If on the default branch, branch first.</li>
+<li>Git commit messages end with a <code>Co-Authored-By: Claude Opus 4.8 (1M context) &lt;noreply@anthropic.com&gt;</code> trailer.</li>
+<li>Hard-to-reverse / outward-facing actions require confirmation first.</li>
+</ul>
+<p>This differs from what earlier versions of this entry documented (which named an explicit <code>--no-verify</code> / amend / <code>reset --hard</code> / force-push prohibition list and a <code>Claude Opus 4.7</code> trailer). The exact prohibitions and the trailer string both changed — confirming the policy is not stable across model versions.</p>
+<h2>Fix</h2>
+<p>Work *with* the policy rather than against it, and <strong>never hardcode the trailer string or the exact prohibition list</strong> — both move between versions. Describe the *intent* (commit, push) and let each platform&#x27;s Claude fill in the current trailer and mechanics. For amend or force-push workflows, surface them to the user for explicit permission.</p>
+<h2>Notes</h2>
+<p>This policy is unique to Code — it does not apply to Claude.ai&#x27;s <code>bash_tool</code> or Desktop&#x27;s <code>mcp__workspace__bash</code>. The reproduction here is observation of the live environment&#x27;s git instructions rather than a triggered refusal (running destructive git against a real repo to force a refusal is not worth the risk); the verified facts are the policy&#x27;s presence and its current content on Opus 4.8.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/code-bash-embedded-git-policy.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

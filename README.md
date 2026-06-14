@@ -24,9 +24,10 @@ If you read five entries, read these:
 
 ## How to use this repo
 
-Four entry points:
+Five entry points:
 
 - **Paste your SKILL.md:** the [compatibility checker](docs/index.html) ([live](https://livlign.github.io/claude-skills-pitfalls/)) flags every catalogued pitfall in your skill, per platform
+- **Browse the web catalog:** the [live catalog](https://livlign.github.io/claude-skills-pitfalls/pitfalls/index.html) renders every entry as its own page, grouped by category
 - **By tool / failure type:** browse [`pitfalls/`](./pitfalls/) by category
 - **By platform:** check the [compatibility matrix](matrix/tool-inventory.md) to see if your skill's tools exist on the platform you're targeting
 - **By symptom:** scan the "Find by symptom" list below for the phrase that matches what your skill is doing wrong

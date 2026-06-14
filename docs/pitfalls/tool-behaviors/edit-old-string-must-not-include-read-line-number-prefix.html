@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edit fails with &quot;String to replace not found&quot; when old_string includes Read&#x27;s line-number prefix — Claude skills pitfalls</title>
+<meta name="description" content="Claude Code&#x27;s Read returns content in cat -n format (&lt;line&gt;\t&lt;text&gt;). If a skill copies a line from that output straight into Edit&#x27;s old_string, the leading line number and tab are not part of the file, so the match fails with &quot;String to replace not found in file.&quot;">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/edit-old-string-must-not-include-read-line-number-prefix.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Edit fails with &quot;String to replace not found&quot; when old_string includes Read&#x27;s line-number prefix">
+<meta property="og:description" content="Claude Code&#x27;s Read returns content in cat -n format (&lt;line&gt;\t&lt;text&gt;). If a skill copies a line from that output straight into Edit&#x27;s old_string, the leading line number and tab are not part of the file, so the match fails with &quot;String to replace not found in file.&quot;">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/tool-behaviors/edit-old-string-must-not-include-read-line-number-prefix.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / tool-behaviors / edit-old-string-must-not-include-read-line-number-prefix</span>
+  </header>
+  <main>
+    <h1><code>Edit</code> fails with &quot;String to replace not found&quot; when <code>old_string</code> includes <code>Read</code>&#x27;s line-number prefix</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude Code&#x27;s <code>Read</code> returns content in <code>cat -n</code> format (<code>&lt;line&gt;\t&lt;text&gt;</code>). If a skill copies a line from that output straight into <code>Edit</code>&#x27;s <code>old_string</code>, the leading line number and tab are not part of the file, so the match fails with &quot;String to replace not found in file.&quot;</p></blockquote>
+<ul>
+<li><strong>Category:</strong> tool-behaviors</li>
+<li><strong>Applies to:</strong> Claude.ai ❓ (see notes) | Claude Code ✅ | Claude Desktop ❓ (same <code>Edit</code>, untested)</li>
+<li><strong>Verified on:</strong> Claude Code (Opus 4.8), 2026-06-14</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Hard error</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill reads a file, then constructs an <code>Edit</code> by reusing a line it just saw in the <code>Read</code> output. The <code>Edit</code> errors with <code>String to replace not found in file.</code> even though the text is visibly present in the file — because the copied string still carries the <code>&lt;line-number&gt;\t</code> prefix that <code>Read</code> prepended for display.</p>
+<h2>Cause</h2>
+<p><code>Read</code> displays content with a line-number prefix (<code>cat -n</code> style): <code>1\tfirst line</code>, <code>2\tsecond line</code>, etc. That prefix is presentation only — it is not in the file. <code>Edit</code> requires <code>old_string</code> to match the file&#x27;s bytes exactly, so a prefixed <code>old_string</code> (<code>2\tsecond line</code>) never matches the real content (<code>second line</code>). The <code>Edit</code> tool description warns about this (&quot;Strip the Read line prefix (line number + tab) before matching&quot;), but it is easy to miss when assembling edits programmatically.</p>
+<h2>Reproduction</h2>
+<p>A file whose real second line is <code>line two</code>, read back as <code>2\tline two</code>, then fed verbatim to <code>Edit</code>:</p>
+<pre><code>$ printf &#x27;line one\nline two\nline three\n&#x27; &gt; /tmp/probe/edit-target.txt
+Read(&quot;/tmp/probe/edit-target.txt&quot;)
+→ 1\tline one
+  2\tline two
+  3\tline three
+
+Edit(file_path=&quot;.../edit-target.txt&quot;, old_string=&quot;2\tline two&quot;, new_string=&quot;2\tline TWO edited&quot;)
+→ String to replace not found in file.
+  String: 2	line two</code></pre>
+<p>Dropping the <code>2\t</code> prefix (<code>old_string=&quot;line two&quot;</code>) matches and succeeds.</p>
+<h2>Fix</h2>
+<p>Build <code>old_string</code> from the file&#x27;s actual content, not from <code>Read</code>&#x27;s displayed output: strip the leading line number and the tab. The text after the first tab on a <code>Read</code> line is the real content.</p>
+<h2>Notes</h2>
+<p>This is distinct from, but often confused with, the prior-<code>Read</code> requirement (<a href="./edit-requires-prior-read-same-conversation.html"><code>edit-requires-prior-read-same-conversation.md</code></a>) — there the <code>Read</code> is missing entirely; here the <code>Read</code> happened but its formatting leaked into the edit. <code>old_string</code> must also be unique unless <code>replace_all</code> is set (<a href="../cross-platform/edit-replace-all-divergence.html"><code>../cross-platform/edit-replace-all-divergence.md</code></a>). Claude.ai&#x27;s <code>view</code> also shows line numbers, so the same trap plausibly applies to <code>str_replace</code> there, but this was verified only on Code.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/tool-behaviors/edit-old-string-must-not-include-read-line-number-prefix.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The bash tool has three structurally different shapes across platforms — Claude skills pitfalls</title>
+<meta name="description" content="Claude.ai, Claude Code, and Claude Desktop each expose a structurally different bash tool — different parameter names, different timeouts, different state semantics.">
+<link rel="canonical" href="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/bash-tool-three-shapes.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The bash tool has three structurally different shapes across platforms">
+<meta property="og:description" content="Claude.ai, Claude Code, and Claude Desktop each expose a structurally different bash tool — different parameter names, different timeouts, different state semantics.">
+<meta property="og:url" content="https://livlign.github.io/claude-skills-pitfalls/pitfalls/cross-platform/bash-tool-three-shapes.html">
+<meta property="og:image" content="https://livlign.github.io/claude-skills-pitfalls/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="site"><a href="../../index.html">claude-skills-pitfalls</a></span>
+    <span class="crumb"><a href="../index.html">catalog</a> / cross-platform / bash-tool-three-shapes</span>
+  </header>
+  <main>
+    <h1>The bash tool has three structurally different shapes across platforms</h1>
+    <span class="tier tier-verified">verified</span>
+    <blockquote><p>Claude.ai, Claude Code, and Claude Desktop each expose a structurally different bash tool — different parameter names, different timeouts, different state semantics.</p></blockquote>
+<ul>
+<li><strong>Category:</strong> cross-platform</li>
+<li><strong>Applies to:</strong> Claude.ai ✅ (<code>bash_tool</code>) | Claude Code ✅ (<code>Bash</code>) | Claude Desktop ✅ (<code>mcp__workspace__bash</code>)</li>
+<li><strong>Verified on:</strong> schema-diff comparison, 2026-05-17</li>
+<li><strong>Verification tier:</strong> verified</li>
+<li><strong>Severity:</strong> Behavioral divergence</li>
+</ul>
+<h2>Symptom</h2>
+<p>A skill that runs shell commands behaves differently on each platform: different filesystem, different timeout ceiling, different policy guards, different state-carryover semantics.</p>
+<h2>Cause</h2>
+<p>Three different tools that look interchangeable from a SKILL.md perspective:</p>
+<ul>
+<li>**Claude.ai <code>bash_tool</code>:** sandboxed Linux, <code>description</code> required, no timeout parameter, allowlisted network egress</li>
+<li>**Claude Code <code>Bash</code>:** host filesystem (the user&#x27;s real machine), <code>description</code> required, <code>run_in_background</code> first-class, embedded git policy, 600s ceiling</li>
+<li>**Claude Desktop <code>mcp__workspace__bash</code>:** sandboxed Linux at <code>/sessions/.../mnt/</code>, no <code>description</code>, no backgrounding, 45s ceiling, no state carryover</li>
+</ul>
+<h2>Fix</h2>
+<p>Skills assuming &quot;the user&#x27;s real filesystem&quot; only work on Code. Skills assuming a &quot;fast sandboxed shell&quot; only work on Desktop. Skills assuming Claude.ai&#x27;s allowlisted network only work there. Don&#x27;t write portable bash-heavy skills without per-platform branching, or constrain the skill to operations that work the same on all three.</p>
+<h2>Notes</h2>
+<p>Related: <a href="../tool-constraints/desktop-bash-45-second-ceiling.html"><code>../tool-constraints/desktop-bash-45-second-ceiling.md</code></a>, <a href="../tool-constraints/code-bash-600-second-ceiling.html"><code>../tool-constraints/code-bash-600-second-ceiling.md</code></a>, <a href="../tool-behaviors/code-bash-embedded-git-policy.html"><code>../tool-behaviors/code-bash-embedded-git-policy.md</code></a>, <a href="../tool-behaviors/desktop-bash-no-state-carryover.html"><code>../tool-behaviors/desktop-bash-no-state-carryover.md</code></a>, <a href="../environment/desktop-bash-sandboxed-not-host.html"><code>../environment/desktop-bash-sandboxed-not-host.md</code></a>.</p>
+  </main>
+  <footer class="pagefoot">
+    <span><a href="../index.html">← All pitfalls</a></span>
+    <span><a href="https://github.com/livlign/claude-skills-pitfalls/blob/main/pitfalls/cross-platform/bash-tool-three-shapes.md">Edit this page on GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>
